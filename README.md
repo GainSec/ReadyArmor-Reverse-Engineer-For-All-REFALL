@@ -11,6 +11,8 @@ The manager selects work and execution resources.
 Specialists inspect source, examine binaries, build harnesses, challenge claims, or compile reports.
 The workbench stores context, coverage, facts, leads, findings, artifacts, and outstanding decisions.
 
+[More Info](https://gainsec.github.io/ReadyArmor-Reverse-Engineer-For-All-REFALL/)
+
 ## Why the design is distinctive
 
 A long investigation must retain more than its latest answer.
