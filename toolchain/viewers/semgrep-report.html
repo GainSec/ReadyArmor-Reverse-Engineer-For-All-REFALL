@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semgrep Scan Results</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #111827; }
+        .bg-gray-50 { background: #f9fafb; }
+        .bg-white { background: #fff; }
+        .bg-blue-600 { background: #2563eb; }
+        .bg-blue-50 { background: #eff6ff; }
+        .bg-blue-100 { background: #dbeafe; }
+        .bg-red-50 { background: #fef2f2; }
+        .bg-red-100 { background: #fee2e2; }
+        .bg-yellow-50 { background: #fffbeb; }
+        .bg-yellow-100 { background: #fef3c7; }
+        .bg-gray-100 { background: #f3f4f6; }
+        .bg-gray-900 { background: #111827; }
+        .bg-red-100 { background: #fee2e2; }
+        .bg-yellow-100 { background: #fef3c7; }
+        .bg-blue-100 { background: #dbeafe; }
+        .bg-gray-100 { background: #f3f4f6; }
+        .hover\:bg-blue-700:hover { background: #1d4ed8; }
+        .hover\:bg-gray-50:hover { background: #f9fafb; }
+        .hover\:bg-red-100:hover { background: #fee2e2; }
+        .hover\:bg-yellow-100:hover { background: #fef3c7; }
+        .hover\:bg-blue-100:hover { background: #dbeafe; }
+        .text-white { color: #fff; }
+        .text-gray-900 { color: #111827; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-500 { color: #6b7280; }
+        .text-gray-100 { color: #f3f4f6; }
+        .text-red-600 { color: #dc2626; }
+        .text-red-800 { color: #991b1b; }
+        .text-yellow-600 { color: #d97706; }
+        .text-yellow-800 { color: #92400e; }
+        .text-blue-600 { color: #2563eb; }
+        .text-blue-800 { color: #1e40af; }
+        .text-gray-800 { color: #1f2937; }
+        .min-h-screen { min-height: 100vh; }
+        .max-w-7xl { max-width: 80rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .mb-2 { margin-bottom: .5rem; }
+        .mb-3 { margin-bottom: .75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .p-2 { padding: .5rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .px-2 { padding-left: .5rem; padding-right: .5rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-1 { padding-top: .25rem; padding-bottom: .25rem; }
+        .py-2 { padding-top: .5rem; padding-bottom: .5rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .flex { display: flex; }
+        .inline-flex { display: inline-flex; }
+        .grid { display: grid; }
+        .hidden { display: none; }
+        .items-center { align-items: center; }
+        .items-start { align-items: flex-start; }
+        .justify-between { justify-content: space-between; }
+        .gap-4 { gap: 1rem; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .rounded { border-radius: .25rem; }
+        .rounded-md { border-radius: .375rem; }
+        .rounded-lg { border-radius: .5rem; }
+        .rounded-full { border-radius: 9999px; }
+        .shadow { box-shadow: 0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.06); }
+        .shadow-sm { box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+        .border-l-4 { border-left-width: 4px; border-left-style: solid; }
+        .border-red-500 { border-left-color: #ef4444; }
+        .border-yellow-500 { border-left-color: #f59e0b; }
+        .border-blue-500 { border-left-color: #3b82f6; }
+        .border-gray-500 { border-left-color: #6b7280; }
+        .ring-2 { box-shadow: 0 0 0 2px #3b82f6; }
+        .ring-blue-500 { box-shadow: 0 0 0 2px #3b82f6; }
+        .cursor-pointer { cursor: pointer; }
+        .overflow-x-auto { overflow-x: auto; }
+        .text-sm { font-size: .875rem; line-height: 1.25rem; }
+        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        pre { margin: 0; white-space: pre-wrap; }
+        @media (min-width: 640px) {
+            .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        }
+        @media (min-width: 768px) {
+            .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+        @media (min-width: 1024px) {
+            .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+        }
+        .finding-card {
+            transition: all 0.3s ease;
+        }
+        .finding-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">Semgrep Scan Results</h1>
+                    <div class="flex items-center gap-4">
+                        <label class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 cursor-pointer">
+                            <span>Load Report</span>
+                            <input type="file" id="file-input" accept=".json" class="hidden">
+                        </label>
+                        <div class="text-sm text-gray-500">Generated on <span id="scan-date"></span></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-lg shadow p-4 cursor-pointer hover:bg-gray-50" onclick="filterFindings('all')">
+                    <h3 class="text-sm font-medium text-gray-500">Total Findings</h3>
+                    <p class="text-2xl font-semibold" id="total-findings">0</p>
+                </div>
+                <div class="bg-red-50 rounded-lg shadow p-4 cursor-pointer hover:bg-red-100" onclick="filterFindings('high')">
+                    <h3 class="text-sm font-medium text-red-600">High Severity</h3>
+                    <p class="text-2xl font-semibold text-red-600" id="high-findings">0</p>
+                </div>
+                <div class="bg-yellow-50 rounded-lg shadow p-4 cursor-pointer hover:bg-yellow-100" onclick="filterFindings('medium')">
+                    <h3 class="text-sm font-medium text-yellow-600">Medium Severity</h3>
+                    <p class="text-2xl font-semibold text-yellow-600" id="medium-findings">0</p>
+                </div>
+                <div class="bg-blue-50 rounded-lg shadow p-4 cursor-pointer hover:bg-blue-100" onclick="filterFindings('low')">
+                    <h3 class="text-sm font-medium text-blue-600">Low Severity</h3>
+                    <p class="text-2xl font-semibold text-blue-600" id="low-findings">0</p>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div id="findings-container" class="space-y-4">
+                <!-- Findings will be inserted here by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize with empty data
+        let reportData = { results: [] };
+        let currentFilter = 'all';
+
+        // File input handler
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const rawData = JSON.parse(e.target.result);
+                        // 只提取核心字段
+                        reportData.results = rawData.results.map(finding => ({
+                            // 漏洞标题 - 从check_id中提取最后一部分作为标题
+                            title: finding.check_id.split('.').pop(),
+                            // 漏洞描述
+                            message: finding.extra.message,
+                            // 漏洞等级
+                            severity: finding.extra.metadata.impact || 'UNKNOWN',
+                            // 相关代码
+                            code: {
+                                path: finding.path,
+                                line: finding.start.line,
+                                content: finding.lines || finding.extra.lines || '(No code available)'
+                            }
+                        }));
+
+                        displayFindings(reportData.results);
+                        
+                        // 更新总数和各等级数量
+                        updateStats(reportData.results);
+                    } catch (error) {
+                        console.error('Error parsing JSON:', error);
+                        alert('Error parsing JSON file. Please try again.');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function updateStats(findings) {
+            document.getElementById('total-findings').textContent = findings.length;
+            document.getElementById('high-findings').textContent = findings.filter(f => f.severity === 'HIGH').length;
+            document.getElementById('medium-findings').textContent = findings.filter(f => f.severity === 'MEDIUM').length;
+            document.getElementById('low-findings').textContent = findings.filter(f => f.severity === 'LOW').length;
+        }
+
+        function getSeverityColor(severity) {
+            switch(severity.toUpperCase()) {
+                case 'HIGH': return 'red';
+                case 'MEDIUM': return 'yellow';
+                case 'LOW': return 'blue';
+                default: return 'gray';
+            }
+        }
+
+        function displayFindings(findings) {
+            const container = document.getElementById('findings-container');
+            container.innerHTML = '';
+
+            findings.forEach(finding => {
+                const severityColor = getSeverityColor(finding.severity);
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-lg shadow-sm p-6 mb-4 border-l-4 border-${severityColor}-500`;
+                
+                card.innerHTML = `
+                    <div class="mb-4 flex justify-between items-start">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2">${finding.title}</h3>
+                            <p class="text-gray-600">${finding.message}</p>
+                        </div>
+                        <span class="px-2 py-1 text-sm font-medium rounded-full bg-${severityColor}-100 text-${severityColor}-800">
+                            ${finding.severity}
+                        </span>
+                    </div>
+                    
+                    <div class="bg-gray-100 rounded p-2 text-sm text-gray-600 mb-3">
+                        ${finding.code.path}:${finding.code.line}
+                    </div>
+
+                    <div class="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+                        <pre class="text-sm text-gray-100">${finding.code.content}</pre>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function filterFindings(severity) {
+            currentFilter = severity;
+            let findings = reportData.results;
+            
+            if (severity !== 'all') {
+                findings = findings.filter(f => f.severity.toUpperCase() === severity.toUpperCase());
+            }
+            
+            displayFindings(findings);
+            
+            // Update visual feedback for active filter
+            document.querySelectorAll('.grid > div').forEach(card => {
+                card.classList.remove('ring-2', 'ring-blue-500');
+            });
+            if (severity === 'all') {
+                document.querySelector('.grid > div:first-child').classList.add('ring-2', 'ring-blue-500');
+            } else {
+                document.querySelector(`.grid > div[onclick="filterFindings('${severity}')"]`).classList.add('ring-2', 'ring-blue-500');
+            }
+        }
+    </script>
+</body>
+</html>

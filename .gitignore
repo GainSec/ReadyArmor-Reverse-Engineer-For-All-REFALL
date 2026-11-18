@@ -1,0 +1,44 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.DS_Store
+.env
+.env.*
+.serena/
+# persistent toolchain: keep source, ignore installed artifacts
+toolchain/.venv/
+toolchain/node_modules/
+toolchain/logs/
+toolchain/*/output/
+toolchain/uv-tools/
+toolchain/uv-bin/
+toolchain/serena-home/
+toolchain/third_party/codebadger/
+toolchain/bin/codebase-memory-mcp
+toolchain/bin/codebase-memory-service
+coverage_service/data/
+logs/
+inspira/
+arcticbase/backend/.venv/
+arcticbase/backend/data/
+arcticbase/frontend/dist/
+arcticbase/frontend/node_modules/
+
+# Local execution and research state
+.refall-loop-state/
+.refall/
+data/
+output/
+backups/
+tmp/
+.playwright-mcp/
+*.pid
+*.log
+*.db
+*.sqlite
+*.sqlite3
+deploy/refall-arcticbase.env
+# Keep reusable examples.
+!*.env.example
+!.env.example

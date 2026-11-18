@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+"""Emit Python and JS/TS import edges as JSON."""
+from __future__ import annotations
+
+import ast
+import json
+import re
+import sys
+from pathlib import Path
+
+
+IGNORED = {".git", ".hg", ".svn", ".venv", "venv", "env", "node_modules", "__pycache__"}
+TS_IMPORT_RE = re.compile(r"""(?:import\s+(?:[^'"]+\s+from\s+)?|export\s+[^'"]+\s+from\s+|require\()\s*['"]([^'"]+)['"]""")
+
+
+def usable(path: Path) -> bool:
+    return not any(part in IGNORED for part in path.parts)
+
+
+def python_edges(root: Path) -> tuple[list[dict[str, object]], list[dict[str, str]]]:
+    edges: list[dict[str, object]] = []
+    errors: list[dict[str, str]] = []
+    for path in sorted(p for p in root.rglob("*.py") if usable(p)):
+        rel = str(path.relative_to(root))
+        try:
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+        except Exception as exc:  # noqa: BLE001
+            errors.append({"path": rel, "error": repr(exc)})
+            continue
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    edges.append({"source": rel, "target": alias.name, "kind": "import", "line": node.lineno})
+            elif isinstance(node, ast.ImportFrom):
+                module = "." * node.level + (node.module or "")
+                edges.append({"source": rel, "target": module, "kind": "from", "line": node.lineno})
+    return edges, errors
+
+
+def ts_edges(root: Path) -> list[dict[str, object]]:
+    edges: list[dict[str, object]] = []
+    for suffix in ("*.js", "*.jsx", "*.ts", "*.tsx", "*.mjs", "*.cjs"):
+        for path in sorted(p for p in root.rglob(suffix) if usable(p)):
+            rel = str(path.relative_to(root))
+            try:
+                text = path.read_text(encoding="utf-8")
+            except UnicodeDecodeError:
+                continue
+            for match in TS_IMPORT_RE.finditer(text):
+                line = text.count("\n", 0, match.start()) + 1
+                edges.append({"source": rel, "target": match.group(1), "kind": "import", "line": line})
+    return edges
+
+
+def main() -> int:
+    if len(sys.argv) != 3:
+        print("usage: module-import-index <TARGET_DIR> <OUTPUT_JSON>", file=sys.stderr)
+        return 2
+    target = Path(sys.argv[1]).resolve()
+    output = Path(sys.argv[2]).resolve()
+    output.parent.mkdir(parents=True, exist_ok=True)
+    py, errors = python_edges(target)
+    data = {
+        "tool": "module-import-index",
+        "target": str(target),
+        "python_import_edges": py,
+        "typescript_import_edges": ts_edges(target),
+        "errors": errors,
+    }
+    output.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return 0 if not errors else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

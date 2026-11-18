@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "refallinfr-code-understanding-toolchain",
+  "description": "Persistent local code-understanding tools for container execution",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@ast-grep/cli": "0.44.1",
+    "@sourcegraph/scip-python": "0.6.6",
+    "@sourcegraph/scip-typescript": "0.4.0",
+    "codecharta-analysis": "1.143.0",
+    "dependency-cruiser": "18.1.0",
+    "madge": "8.0.0",
+    "typescript": "5.9.3",
+    "typescript-language-server": "5.1.3"
+  }
+}

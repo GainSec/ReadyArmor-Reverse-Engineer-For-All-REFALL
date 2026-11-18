@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "codebadger": {
+      "transport": "streamable-http",
+      "url": "http://127.0.0.1:4242/mcp",
+      "timeout": 60,
+      "description": "Codebadger CPG/data-flow/taint analysis MCP service managed by /projects/REFALL-V10/toolchain/ctl.sh; start with ctl.sh up codebadger-mcp."
+    }
+  }
+}

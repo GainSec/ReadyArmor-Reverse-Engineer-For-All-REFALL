@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REFALL-V10 Report</title>
+<!--
+  REFALL-V10 report template. Self-contained, HTML-first, dark deployment theme.
+  The report agent fills each data-refall-slot with ledger-backed content.
+  Severity must carry a TEXT label (not color alone). Keep evidence anchors as
+  <code> so they stay copyable. Sections with no content keep an explicit
+  "None recorded" note rather than being deleted from the TOC. Required sections
+  mirror spec/deliverable.md.
+-->
+<style>
+ :root{--bg:#0d1117;--panel:#161b24;--panel2:#1c2230;--ink:#e8edf6;--muted:#93a0b6;--line:#28313f;--accent:#5cc8ff;--code-bg:#0a0d13;--code-ink:#cfe6ff;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--crit:#ff5470;--high:#ff8f6b;--med:#ffcf6b;--low:#5ef2a6;--ok:#5ef2a6}
+ *{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+ a{color:var(--accent);text-decoration:none}
+ .shell{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:290px 1fr;min-height:100vh}
+ aside{position:sticky;top:0;height:100vh;overflow:auto;padding:20px 16px;background:#10151f;border-right:1px solid var(--line)}
+ .brand{background:linear-gradient(#1a2130,#141a26);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:16px}
+ .brand .kicker{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--accent);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+ .brand h1{font-size:17px;margin:0 0 4px}.brand p{margin:0;color:var(--muted);font-size:12.5px}
+ .nav-title{font-size:11px;text-transform:uppercase;color:var(--muted);font-weight:700;margin:16px 0 8px;letter-spacing:.06em}
+ .toc a{display:block;padding:6px 9px;color:#c4d2ea;border-radius:5px;font-size:12.5px;margin-bottom:2px}
+ .toc a:hover{background:var(--panel2);color:#fff}
+ main{padding:28px 32px;min-width:0}
+ h2{font-size:19px;margin:0 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line)}h2 small{color:var(--muted);font-weight:400}
+ h3{margin:0}h4{margin:16px 0 6px;font-size:14px;color:var(--accent)}
+ .muted{color:var(--muted)}code{font-family:var(--mono);font-size:.85em;color:var(--accent);word-break:break-word}
+ .hero{background:linear-gradient(#171d29,#121620);border:1px solid var(--line);border-radius:12px;padding:26px}
+ .hero h2{border:none;font-size:28px;margin:0 0 8px;padding:0}.hero p{color:var(--muted);margin:6px 0 0}
+ .meta{font-size:12.5px;color:var(--muted);margin-top:10px}
+ .gate{display:inline-block;margin-top:12px;padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);font-weight:700;font-size:13px}
+ .gate[data-state="blocked"]{color:var(--crit);border-color:#5a2f3a}.gate[data-state="ready"]{color:var(--ok);border-color:#2f5a44}
+ .stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin:18px 0}
+ .stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 14px}
+ .stat b{display:block;font-size:23px}.stat span{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+ .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px;margin-top:20px}
+ details.panel{padding:0;overflow:hidden}
+ details.panel>summary{list-style:none;cursor:pointer;padding:16px 20px;font-size:18px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:10px}
+ details.panel>summary::-webkit-details-marker{display:none}
+ details.panel>summary::before{content:"\25B8";color:var(--accent);font-size:13px;transition:transform .15s}
+ details.panel[open]>summary{border-bottom:1px solid var(--line)}
+ details.panel[open]>summary::before{transform:rotate(90deg)}
+ details.panel>summary:hover{color:var(--accent)}
+ .sec-body{padding:18px 20px}
+ table{width:100%;border-collapse:collapse;font-size:13.5px}
+ th,td{text-align:left;vertical-align:top;padding:9px 10px;border-bottom:1px solid var(--line);word-break:break-word}
+ th{background:var(--panel2);color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+ .badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:700;border:1px solid var(--line);background:var(--panel2);color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+ .badge.critical{color:var(--crit);border-color:#5a2f3a;background:#2a1720}
+ .badge.high{color:var(--high);border-color:#5a3f2f;background:#2a1d16}
+ .badge.medium{color:var(--med);border-color:#5a4f2f;background:#2a2516}
+ .badge.low{color:var(--low);border-color:#2f5a44;background:#132a20}
+ .finding{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-top:20px;overflow:hidden}
+ .finding.critical{border-left:4px solid var(--crit)}.finding.high{border-left:4px solid var(--high)}.finding.medium{border-left:4px solid var(--med)}.finding.low{border-left:4px solid var(--low)}
+ .finding-header{padding:16px 20px;background:linear-gradient(#1a212e,#141a25);border-bottom:1px solid var(--line)}
+ .finding-header .badge{margin-bottom:8px}.finding-header h3{font-size:20px}
+ .finding-body{padding:20px}
+ .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .kv{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--panel2)}
+ .kv strong{display:block;font-size:11px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;letter-spacing:.04em}
+ .evlist{margin:6px 0 0;padding-left:18px}.evlist li{margin:3px 0}
+ .note{border-left:4px solid var(--accent);background:#12202c;padding:11px 13px;margin:12px 0;border-radius:0 8px 8px 0}
+ pre{overflow:auto;background:var(--code-bg);color:var(--code-ink);padding:13px;border-radius:8px;font-size:12px;line-height:1.45;border:1px solid var(--line)}
+ details{border:1px solid var(--line);border-radius:8px;margin-top:14px;background:var(--panel2)}
+ summary{cursor:pointer;padding:12px 14px;font-weight:700;color:var(--muted)}
+ .empty{color:var(--muted);font-style:italic}
+ .foot{color:var(--muted);font-size:12px;margin-top:26px;border-top:1px solid var(--line);padding-top:14px}
+ @media(max-width:980px){.shell{grid-template-columns:1fr}aside{position:relative;height:auto}.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}main{padding:18px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside>
+  <div class="brand"><span class="kicker">REFALL-V10</span><h1 data-refall-slot="subject-slug">Subject</h1><p>Security assessment · live evidence</p></div>
+  <div class="nav-title">Contents</div>
+  <nav class="toc">
+    <a href="#summary">Executive summary</a>
+    <a href="#scope">Tested scope &amp; exclusions</a>
+    <a href="#methodology">Methodology</a>
+    <a href="#coverage">Coverage summary</a>
+    <a href="#evidence-ledger">Evidence ledger summary</a>
+    <a href="#findings-validated">Validated findings</a>
+    <a href="#findings-provisional">Provisional findings</a>
+    <a href="#false-positives">False positives &amp; duplicates</a>
+    <a href="#attack-chains">Attack chains</a>
+    <a href="#architecture">Architecture &amp; attack surface</a>
+    <a href="#flows">Data &amp; control flows</a>
+    <a href="#repro">Reproduction &amp; PoC</a>
+    <a href="#remediation">Remediation guidance</a>
+    <a href="#pending-actions">Pending / deferred actions</a>
+    <a href="#runtime-evidence">Runtime evidence</a>
+    <a href="#runtime-warnings">Runtime warnings</a>
+    <a href="#capability-decisions">Capability decisions</a>
+    <a href="#freshness">Source / config freshness</a>
+    <a href="#visual-evidence">Visual evidence</a>
+    <a href="#provenance">Workbench object provenance</a>
+    <a href="#closeout-gate">Closeout gate state</a>
+  </nav>
+</aside>
+<main>
+  <div class="hero" id="summary">
+    <h2 data-refall-slot="title">REFALL Security Report</h2>
+    <p data-refall-slot="summary">Executive summary is assembled from ledger-backed REFALL state only.</p>
+    <span class="gate" data-refall-slot="closeout-gate-badge" data-state="">Closeout gate: —</span>
+    <p class="meta" data-refall-slot="report-meta">Generated —  · workbench —</p>
+  </div>
+
+  <div class="stats" data-refall-slot="stats"></div>
+
+  <!-- All sections are collapsible <details>, collapsed by default. Closeout gate is intentionally last. -->
+  <details class="panel" id="scope"><summary>Tested Scope &amp; Exclusions</summary><div class="sec-body" data-refall-slot="scope"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="methodology"><summary>Methodology</summary><div class="sec-body" data-refall-slot="methodology"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="coverage"><summary>Coverage Summary</summary><div class="sec-body" data-refall-slot="coverage"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="evidence-ledger"><summary>Evidence Ledger Summary</summary><div class="sec-body" data-refall-slot="evidence-ledger"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="findings-validated"><summary>Validated Findings</summary><div class="sec-body" data-refall-slot="findings-validated"><p class="empty">None validated yet.</p></div></details>
+  <details class="panel" id="findings-provisional"><summary>Provisional Findings</summary><div class="sec-body" data-refall-slot="findings-provisional"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="false-positives"><summary>False Positives &amp; Duplicates</summary><div class="sec-body" data-refall-slot="false-positives"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="attack-chains"><summary>Attack Chains</summary><div class="sec-body" data-refall-slot="attack-chains"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="architecture"><summary>Architecture &amp; Attack Surface</summary><div class="sec-body" data-refall-slot="architecture"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="flows"><summary>Data &amp; Control Flows</summary><div class="sec-body" data-refall-slot="flows"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="repro"><summary>Reproduction &amp; PoC Notes</summary><div class="sec-body" data-refall-slot="repro"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="remediation"><summary>Remediation Guidance</summary><div class="sec-body" data-refall-slot="remediation"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="pending-actions"><summary>Pending, Deferred &amp; Resolved Actions</summary><div class="sec-body" data-refall-slot="pending-actions"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="runtime-evidence"><summary>Runtime Evidence</summary><div class="sec-body" data-refall-slot="runtime-evidence"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="runtime-warnings"><summary>Runtime Warnings</summary><div class="sec-body" data-refall-slot="runtime-warnings"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="capability-decisions"><summary>Capability Decisions</summary><div class="sec-body" data-refall-slot="capability-decisions"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="freshness"><summary>Source / Config Freshness Receipts</summary><div class="sec-body" data-refall-slot="freshness"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="visual-evidence"><summary>Visual Evidence</summary><div class="sec-body" data-refall-slot="visual-evidence"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="provenance"><summary>Workbench Object Provenance</summary><div class="sec-body" data-refall-slot="provenance"><p class="empty">None recorded.</p></div></details>
+  <details class="panel" id="closeout-gate"><summary>Closeout Gate State</summary><div class="sec-body" data-refall-slot="closeout-gate"><p class="empty">None recorded.</p></div></details>
+
+  <div class="foot" data-refall-slot="footer">REFALL-V10 · self-contained HTML report · rendered from workbench ledger, findings, coverage, and linked objects.</div>
+</main>
+</div>
+</body>
+</html>

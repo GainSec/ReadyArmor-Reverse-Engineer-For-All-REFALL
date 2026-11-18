@@ -1,0 +1,22 @@
+services:
+  refall-arcticbase:
+    build:
+      context: ../arcticbase
+    env_file:
+      - path: ./refall-arcticbase.env
+        required: false
+    environment:
+      ARCTIC_BASE_DATA: ${REFALL_ARCTICBASE_DATA:-/var/lib/refall/arcticbase}
+      ARCTIC_BASE_HOST: 0.0.0.0
+      ARCTIC_BASE_PORT: 7673
+      REFALL_ARCTICBASE_HOST: ${REFALL_ARCTICBASE_HOST:-auto-lan}
+      REFALL_ARCTICBASE_PORT: ${REFALL_ARCTICBASE_PORT:-7673}
+    ports:
+      - "${REFALL_LAN_BIND_IP:-0.0.0.0}:${REFALL_ARCTICBASE_PORT:-7673}:7673"
+    volumes:
+      - refall_arcticbase_data:${REFALL_ARCTICBASE_DATA:-/var/lib/refall/arcticbase}
+      - ${REFALL_SUBJECT_ROOT:-./subjects}:${REFALL_SUBJECT_ROOT:-/var/lib/refall/subjects}
+    restart: unless-stopped
+
+volumes:
+  refall_arcticbase_data:

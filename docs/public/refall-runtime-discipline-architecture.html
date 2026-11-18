@@ -1,0 +1,132 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>REFALL AB architecture</title><style>body{margin:0;background:#f5f6f7;color:#162332;font:17px/1.65 system-ui,sans-serif}main{max-width:950px;margin:auto;padding:48px 24px}h1{font-size:2.4rem;line-height:1.15}h2{margin-top:2em}a{color:#174f9b}table{border-collapse:collapse;width:100%;font-size:.9em}td,th{padding:10px;border:1px solid #ccd2d9;text-align:left}pre{overflow:auto;padding:18px;background:#e8edf2}code{overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap} @media(max-width:600px){main{padding:24px 16px}h1{font-size:2rem}table{display:block;overflow:auto}} @media print{body{background:white}main{padding:0}nav{display:none}}</style><main><nav><a href="../README.md">Documentation</a><a href="../../BASE-INSTALLATION.md">Installation</a><a href="../../OPERATING_GUIDE.md">Operation</a></nav><h1>REFALL AB evidence requirements</h1>
+<h2>Evidence model</h2>
+<p>An observation records what the specialist examined or measured.
+A lead records a question that requires more work.
+A finding records a supported security conclusion.
+A receipt records evidence for a decision or state transition.</p>
+<p>Each finding includes the affected component, source anchors, reproduction procedure, impact, likelihood, remediation, and verification state.
+Evidence-bearing submissions also include confidence and limitations.
+Use artifact references when source anchors cannot represent the proof.</p>
+<h2>Structured submissions</h2>
+<p>Return terminal results in a fenced <code>refall-submit</code> JSON block.
+The schema name is <code>refall.submit.v1</code>.
+The submission event is <code>task_result_submit</code>.
+Use <code>submission_id</code> to identify the result.</p>
+<p>The executor validates the payload before it applies coverage updates.
+Duplicate structured submissions do not create duplicate findings.
+<code>ref_all_executor/contract_payloads.py</code> supplies payload helpers.
+Backend DTO validation is in <code>arcticbase/backend/src/arctic_base/refall/contracts.py</code>.</p>
+<p>Set <code>REFALL_REQUIRE_STRUCTURED_SUBMIT=true</code> to require valid structured results.
+A missing or malformed result then creates pending work instead of completed coverage.
+Legacy terminal markers remain a compatibility format.</p>
+<h2>Finding status and evidence quality</h2>
+<p>Status and evidence quality describe different properties.
+Status describes the research workflow.
+Quality describes the strength of the proof.</p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PROVISIONALLY_VALID</code></td>
+<td>Candidate finding that requires review.</td>
+</tr>
+<tr>
+<td><code>NEEDS_RESEARCH</code></td>
+<td>Finding that requires more examination.</td>
+</tr>
+<tr>
+<td><code>VALID</code></td>
+<td>Finding that passed the required checks.</td>
+</tr>
+<tr>
+<td><code>FALSE_POSITIVE</code></td>
+<td>Rejected finding with a supporting receipt.</td>
+</tr>
+<tr>
+<td><code>DUPLICATE</code></td>
+<td>Finding equivalent to a canonical finding.</td>
+</tr>
+<tr>
+<td><code>CHAINABLE_DEFERRED</code></td>
+<td>Preserved primitive that requires chain analysis.</td>
+</tr>
+</tbody>
+</table>
+<p>Evidence quality uses <code>HYPOTHESIS</code>, <code>CODE_CONFIRMED</code>, and <code>LIVE_CONFIRMED</code>.
+Static confirmation does not establish runtime exploitability.</p>
+<h2>Disposition receipts</h2>
+<p>Submit status changes through the finding transition endpoint.
+Use typed evidence receipts for rejection, duplicates, deferral, severity reduction, and quality reduction.</p>
+<table>
+<thead>
+<tr>
+<th>Receipt type</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code_anchor</code></td>
+<td>Source or binary location that supports the claim.</td>
+</tr>
+<tr>
+<td><code>live_repro</code></td>
+<td>Reproduced runtime behavior.</td>
+</tr>
+<tr>
+<td><code>non_reachability_proof</code></td>
+<td>Routing or configuration proof that excludes the sink.</td>
+</tr>
+<tr>
+<td><code>duplicate_equivalence</code></td>
+<td>Same root cause, sink, and remediation as the canonical finding.</td>
+</tr>
+<tr>
+<td><code>scope_boundary</code></td>
+<td>Recorded scope or exclusion boundary.</td>
+</tr>
+<tr>
+<td><code>downgrade_with_trigger_inventory</code></td>
+<td>Relevant trigger paths and reason for reduced severity.</td>
+</tr>
+<tr>
+<td><code>chain_preservation</code></td>
+<td>Preserved primitive and remaining chain questions.</td>
+</tr>
+<tr>
+<td><code>patch_verification</code></td>
+<td>Patch evidence and verification results.</td>
+</tr>
+<tr>
+<td><code>operator_override</code></td>
+<td>Explicit operator decision and reason.</td>
+</tr>
+</tbody>
+</table>
+<p>A duplicate receipt identifies <code>duplicate_of</code>.
+Receipts can include <code>source_hashes</code>.
+The backend refuses a receipt when its source or configuration hashes are stale.
+Accepted and refused transitions remain in the ledger.</p>
+<h2>Pending actions and capabilities</h2>
+<p>Pending actions preserve unfinished obligations.
+Examples include missing validation, exhausted retries, scope decisions, and operator requests.
+A direct <code>capability_missing</code> result creates a capability request.
+A direct <code>scope_blocked</code> result creates a <code>scope_decision</code> action.
+Neither result completes the research unit.</p>
+<p>Capabilities restrict live actions to the operator-approved class and scope.
+The worker cannot approve its own live actions.</p>
+<h2>Closeout and reports</h2>
+<p>The closeout gate checks unresolved pending actions, refused transitions, suppressive finding changes, report freshness, and validation proof.
+Resolve each condition or record an operator override receipt.</p>
+<p>Reports include scope, methods, findings, evidence, limitations, remediation, and verification state.
+A visual evidence pack can contain screenshots, traces, CodeCharta views, Codebadger output, or exploit-flow diagrams.
+Link each visual to the claim that it supports.</p>
+<p>The ledger can record <code>codebadger-toolchain-not-run</code> when that tool did not run.
+The publication flow records <code>vendor-cna-report-generated</code> for the corresponding report artifact.
+Read the runtime report specification in <code>docs/superpowers/specs/2026-07-16-refall-report-format-spec.md</code>.</p>
+</main></html>

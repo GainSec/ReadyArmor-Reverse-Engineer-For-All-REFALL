@@ -1,0 +1,210 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TOOLCHAIN_ROOT="${TOOLCHAIN_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+LOCK="$TOOLCHAIN_ROOT/versions.lock"
+
+# shellcheck source=/dev/null
+source "$LOCK"
+
+CODEBADGER_ROOT="${REFALL_CODEBADGER_ROOT:-$TOOLCHAIN_ROOT/third_party/codebadger}"
+ENV_FILE="$CODEBADGER_ROOT/.env"
+
+usage() {
+  cat <<'EOF'
+usage:
+  codebadger-service ensure
+  codebadger-service supervise
+  codebadger-service up
+  codebadger-service down
+  codebadger-service restart
+  codebadger-service status
+  codebadger-service health
+  codebadger-service mcp-config
+
+Manages the REFALL-pinned Codebadger Docker stack. Codebadger is installed as
+default REFALL infrastructure, but the manager agent starts it only when a
+subject benefits from CPG/data-flow/taint/slicing analysis.
+EOF
+}
+
+die() {
+  echo "codebadger-service: $*" >&2
+  exit 1
+}
+
+require_cmd() {
+  command -v "$1" >/dev/null 2>&1 || die "$1 is required"
+}
+
+env_value() {
+  local key="$1"
+  [ -f "$ENV_FILE" ] || return 1
+  sed -n "s/^$key=//p" "$ENV_FILE" | tail -1
+}
+
+mcp_port() {
+  local value
+  value="${REFALL_CODEBADGER_PORT:-}"
+  if [ -z "$value" ]; then
+    value="$(env_value MCP_PORT || true)"
+  fi
+  printf '%s\n' "${value:-$CODEBADGER_MCP_PORT}"
+}
+
+ensure_checkout() {
+  require_cmd git
+  mkdir -p "$(dirname "$CODEBADGER_ROOT")"
+
+  if [ -d "$CODEBADGER_ROOT/.git" ]; then
+    local current dirty
+    current="$(git -C "$CODEBADGER_ROOT" rev-parse HEAD 2>/dev/null || true)"
+    dirty="$(git -C "$CODEBADGER_ROOT" status --porcelain 2>/dev/null || true)"
+    if [ "$current" = "$CODEBADGER_GIT_REF" ]; then
+      return 0
+    fi
+    [ -z "$dirty" ] || die "$CODEBADGER_ROOT has local changes; refusing to change pinned checkout"
+    git -C "$CODEBADGER_ROOT" fetch --depth 1 origin "$CODEBADGER_GIT_REF"
+    git -C "$CODEBADGER_ROOT" checkout --detach "$CODEBADGER_GIT_REF"
+    return 0
+  fi
+
+  [ ! -e "$CODEBADGER_ROOT" ] || die "$CODEBADGER_ROOT exists but is not a git checkout"
+
+  local tmp
+  tmp="$CODEBADGER_ROOT.tmp.$$"
+  rm -rf "$tmp"
+  git clone --filter=blob:none --no-checkout "$CODEBADGER_REPO_URL" "$tmp"
+  git -C "$tmp" fetch --depth 1 origin "$CODEBADGER_GIT_REF"
+  git -C "$tmp" checkout --detach "$CODEBADGER_GIT_REF"
+  mv "$tmp" "$CODEBADGER_ROOT"
+}
+
+ensure_env() {
+  mkdir -p "$CODEBADGER_ROOT/playground" "$CODEBADGER_ROOT/pgdata" "$CODEBADGER_ROOT/logs"
+  if [ -f "$ENV_FILE" ]; then
+    return 0
+  fi
+
+  cat > "$ENV_FILE" <<EOF
+# REFALL-owned Codebadger defaults. Edit this file after install for host sizing.
+MCP_HOST=0.0.0.0
+MCP_PORT=${REFALL_CODEBADGER_PORT:-$CODEBADGER_MCP_PORT}
+MCP_PUBLISH_HOST=${REFALL_CODEBADGER_BIND_HOST:-$CODEBADGER_MCP_PUBLISH_HOST}
+PLAYGROUND_HOST_PATH=$CODEBADGER_ROOT/playground
+POSTGRES_DATA_PATH=$CODEBADGER_ROOT/pgdata
+JOERN_MEM_LIMIT=${REFALL_CODEBADGER_JOERN_MEM_LIMIT:-$CODEBADGER_JOERN_MEM_LIMIT}
+JOERN_MEMORY_BUDGET_MB=${REFALL_CODEBADGER_JOERN_MEMORY_BUDGET_MB:-$CODEBADGER_JOERN_MEMORY_BUDGET_MB}
+CPG_BUILD_WORKERS=${REFALL_CODEBADGER_BUILD_WORKERS:-$CODEBADGER_BUILD_WORKERS}
+CPG_BUILD_HEAP_GB=${REFALL_CODEBADGER_BUILD_HEAP_GB:-$CODEBADGER_BUILD_HEAP_GB}
+CPG_QUEUE_BACKEND=durable
+CPG_QUEUE_MAXSIZE=64
+MAX_MCP_CONNECTIONS=16
+MAX_REPO_SIZE_MB=1024
+CPG_LARGE_PROJECT_GUARD=true
+CPG_LARGE_PROJECT_MAX_MB=2000
+CPG_LARGE_PROJECT_MAX_LOC=2000000
+# REFALL default is trusted single-manager local analysis. source_type='local'
+# is allowed only under the container-visible playground path below.
+CHAT_DEPLOY=${REFALL_CODEBADGER_CHAT_DEPLOY:-false}
+ALLOWED_SOURCE_ROOTS=/app/playground
+DOCKER_HOST=${DOCKER_HOST:-unix:///var/run/docker.sock}
+GITHUB_TOKEN=
+EOF
+}
+
+ensure_stack() {
+  ensure_checkout
+  ensure_env
+}
+
+deploy() {
+  local cmd="$1"
+  ensure_stack
+  require_cmd docker
+  (cd "$CODEBADGER_ROOT" && ./scripts/deploy.sh "$cmd")
+}
+
+health() {
+  local port body
+  port="$(mcp_port)"
+  body="$(curl -fsS "http://127.0.0.1:$port/health" 2>/dev/null)" || return 1
+  printf '%s\n' "$body" | grep -Eq '"mcp"[[:space:]]*:[[:space:]]*"codebadger"' || return 1
+  printf '%s\n' "$body" | grep -Eq '"status"[[:space:]]*:[[:space:]]*"up"'
+}
+
+status() {
+  if [ ! -d "$CODEBADGER_ROOT/.git" ]; then
+    echo "Codebadger checkout missing: run codebadger-service ensure"
+    return 1
+  fi
+  (cd "$CODEBADGER_ROOT" && ./scripts/deploy.sh status)
+}
+
+down() {
+  if [ ! -d "$CODEBADGER_ROOT/.git" ]; then
+    return 0
+  fi
+  (cd "$CODEBADGER_ROOT" && ./scripts/deploy.sh down)
+}
+
+supervise() {
+  deploy up
+  trap 'down; exit 0' INT TERM
+  while true; do
+    sleep 3600 &
+    wait "$!" || true
+  done
+}
+
+mcp_config() {
+  local port
+  port="$(mcp_port)"
+  cat <<EOF
+{
+  "mcpServers": {
+    "codebadger": {
+      "transport": "streamable-http",
+      "url": "http://127.0.0.1:$port/mcp",
+      "timeout": 60,
+      "description": "Codebadger CPG/data-flow/taint analysis MCP service managed by $TOOLCHAIN_ROOT/ctl.sh"
+    }
+  }
+}
+EOF
+}
+
+cmd="${1:-}"
+case "$cmd" in
+  ensure)
+    ensure_stack
+    ;;
+  supervise)
+    supervise
+    ;;
+  up)
+    deploy up
+    ;;
+  down)
+    down
+    ;;
+  restart)
+    deploy restart
+    ;;
+  status)
+    status
+    ;;
+  health)
+    health
+    ;;
+  mcp-config)
+    mcp_config
+    ;;
+  --help|-h|help|'')
+    usage
+    ;;
+  *)
+    usage >&2
+    exit 2
+    ;;
+esac

@@ -1,0 +1,3215 @@
+{
+  "product": "REFALL",
+  "name": "REFALL AB",
+  "tagline": "Persistent research loops. Bounded work. Reviewable evidence.",
+  "summary": "REFALL AB makes a research campaign persistent across worker conversations and manager sessions. Shared coverage, evidence, obligations, scoped launch decisions, and checked closeout connect bounded work to reviewable conclusions.",
+  "accent": "#3662a6",
+  "chapters": [
+    {
+      "path": "README.md",
+      "label": "Overview"
+    },
+    {
+      "path": "docs/ready-armor.md",
+      "label": "Ready Armor approach"
+    },
+    {
+      "path": "docs/research-cycles.md",
+      "label": "Research cycles"
+    },
+    {
+      "path": "docs/ledger-and-wishlist.md",
+      "label": "Ledger and wishlist"
+    },
+    {
+      "path": "docs/features.md",
+      "label": "Feature catalog"
+    },
+    {
+      "path": "docs/end-to-end.md",
+      "label": "End-to-end workflows"
+    },
+    {
+      "path": "docs/codex.md",
+      "label": "Technical codex"
+    },
+    {
+      "path": "docs/research-architecture.md",
+      "label": "Research architecture"
+    },
+    {
+      "path": "docs/control-in-depth.md",
+      "label": "Control in depth"
+    },
+    {
+      "path": "docs/work-modules.md",
+      "label": "Work modules"
+    },
+    {
+      "path": "docs/architecture.md",
+      "label": "Architecture map"
+    },
+    {
+      "path": "BASE-INSTALLATION.md",
+      "label": "Installation"
+    },
+    {
+      "path": "docs/configuration.md",
+      "label": "Configuration"
+    },
+    {
+      "path": "OPERATING_GUIDE.md",
+      "label": "Operating procedures"
+    },
+    {
+      "path": "REFALL-MANAGER-OPERATING-GUIDE.md",
+      "label": "Manager guide"
+    },
+    {
+      "path": "docs/api.md",
+      "label": "API reference"
+    },
+    {
+      "path": "docs/evidence.md",
+      "label": "Evidence requirements"
+    },
+    {
+      "path": "toolchain/MANIFEST.md",
+      "label": "Analysis toolchain"
+    },
+    {
+      "path": "deploy/README.md",
+      "label": "Deployment"
+    },
+    {
+      "path": "docs/troubleshooting.md",
+      "label": "Troubleshooting"
+    },
+    {
+      "path": "docs/development.md",
+      "label": "Development"
+    },
+    {
+      "path": "docs/README.md",
+      "label": "Documentation index"
+    },
+    {
+      "path": "docs/site.md",
+      "label": "Documentation site"
+    },
+    {
+      "path": "docs/source-index.md",
+      "label": "Source file index"
+    },
+    {
+      "path": "LICENSE.md",
+      "label": "License"
+    },
+    {
+      "path": "arcticbase/LICENSE",
+      "label": "ArcticBase MIT license"
+    }
+  ],
+  "features": [
+    {
+      "title": "Persistent subject workbenches",
+      "description": "Keep context, coverage, evidence, decisions, and reports together for each subject.",
+      "mechanism": "Workbench metadata, SQLite records, JSONL ledger entries, runtime artifacts, and the current report pointer share one subject identity.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_subjects.py",
+          "symbol": "",
+          "line": 1
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "CoverageStore",
+          "line": 332
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/ledger.py",
+          "symbol": "append_entry",
+          "line": 41
+        }
+      ]
+    },
+    {
+      "title": "Context before execution",
+      "description": "Give specialists a shared briefing before the loop starts.",
+      "mechanism": "The context writer compiles selected material. The backend stores the result and refuses startup without nonempty context.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+          "symbol": "_context_subject",
+          "line": 978
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+          "symbol": "_context_materials",
+          "line": 1269
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+          "symbol": "_run_context_writer",
+          "line": 1064
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+          "symbol": "_save_context_artifacts",
+          "line": 1419
+        }
+      ]
+    },
+    {
+      "title": "Readiness and work estimates",
+      "description": "Inspect execution prerequisites and remaining work before using specialist capacity.",
+      "mechanism": "Doctor checks services and resources. Estimate combines inventory, coverage, pending actions, and readiness.",
+      "source": [
+        {
+          "path": "ref_all_executor/doctor.py",
+          "symbol": "doctor",
+          "line": 26
+        },
+        {
+          "path": "ref_all_executor/estimate.py",
+          "symbol": "estimate_subject",
+          "line": 9
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+          "symbol": "_doctor_payload",
+          "line": 700
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+          "symbol": "_estimate_subject",
+          "line": 738
+        }
+      ]
+    },
+    {
+      "title": "Content identity and measured coverage",
+      "description": "Know which files exist and which examination units have recorded results.",
+      "mechanism": "Streaming hashes identify content. Coverage units carry leases, summaries, sensitivity, data touched, flows, leads, and evidence.",
+      "source": [
+        {
+          "path": "ref_all_executor/source_inventory.py",
+          "symbol": "build_source_inventory",
+          "line": 66
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._auto_enumerate_if_empty",
+          "line": 1654
+        }
+      ]
+    },
+    {
+      "title": "Modules with local dependencies",
+      "description": "Combine breadth, decomposition, review, verification, research, and development within one subject.",
+      "mechanism": "Subject, finding, and later unit selection apply dependencies and module limits. Later unit passes also apply recorded-path filters. Fresh characterization uses coverage claims and global concurrency.",
+      "source": [
+        {
+          "path": "ref_all_executor/work_modules.py",
+          "symbol": "WorkModule",
+          "line": 46
+        },
+        {
+          "path": "ref_all_executor/work_modules.py",
+          "symbol": "eligible_modules",
+          "line": 333
+        },
+        {
+          "path": "ref_all_executor/work_modules.py",
+          "symbol": "ModuleScheduler",
+          "line": 386
+        }
+      ]
+    },
+    {
+      "title": "Subject-specific research without a new driver",
+      "description": "Add or adjust bounded passes through workbench configuration.",
+      "mechanism": "The refall_modules field selects packs and custom declarations. The registry resolves dependencies; scheduler branches apply their corresponding selection checks.",
+      "source": [
+        {
+          "path": "ref_all_executor/work_modules.py",
+          "symbol": "load_subject_config",
+          "line": 522
+        },
+        {
+          "path": "ref_all_executor/work_modules.py",
+          "symbol": "ModuleRegistry.from_config",
+          "line": 217
+        },
+        {
+          "path": "ref_all_executor/work_modules.py",
+          "symbol": "ModuleRegistry._assert_acyclic",
+          "line": 301
+        }
+      ]
+    },
+    {
+      "title": "Breadth before repeated depth",
+      "description": "Keep an initial component subset from consuming the whole campaign.",
+      "mechanism": "Pending actions and subject tasks run first. Fresh units precede finding tasks and later unit passes.",
+      "source": [
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._claim_next_task",
+          "line": 590
+        }
+      ]
+    },
+    {
+      "title": "Specialist provider routing",
+      "description": "Assign interpretation, implementation, review, and verification to configured providers.",
+      "mechanism": "Task classes supply routing rationale. Subject lane patterns balance active slots. Optional Grok work remains host-managed.",
+      "source": [
+        {
+          "path": "ref_all_executor/router.py",
+          "symbol": "route",
+          "line": 49
+        },
+        {
+          "path": "ref_all_executor/config.py",
+          "symbol": "",
+          "line": 1
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._next_dispatch_lane",
+          "line": 379
+        }
+      ]
+    },
+    {
+      "title": "Evidence appears during the run",
+      "description": "Preserve observations from agent messages, structured files, and saved analysis.",
+      "mechanism": "Polling reads the conversation event stream and workspace. Incremental and terminal ingestion share stable identities.",
+      "source": [
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "read_conversation_agent_text",
+          "line": 131
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._incremental_ingest",
+          "line": 1115
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._merge_submission_file",
+          "line": 965
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._register_workspace_artifact",
+          "line": 1010
+        }
+      ]
+    },
+    {
+      "title": "Research survives incomplete workers",
+      "description": "Keep useful facts and artifacts when a worker stops without a clean result.",
+      "mechanism": "Terminal handling classifies and parses the invocation, checks submission identity, and preserves observations before handling the classified outcome. Failed assignments remain pending.",
+      "source": [
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._finish_conversation",
+          "line": 1378
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._salvage_intel",
+          "line": 1038
+        }
+      ]
+    },
+    {
+      "title": "Durable output before module completion",
+      "description": "Prevent an empty subject pass from becoming a progress marker.",
+      "mechanism": "Missing canonical observations or failed persistence creates an ingestion-review action and blocks that module completion.",
+      "source": [
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._block_empty_subject_module_completion",
+          "line": 1161
+        }
+      ]
+    },
+    {
+      "title": "Typed result contracts",
+      "description": "Separate research results, finding proposals, evidence updates, and control requests.",
+      "mechanism": "The refall.submit.v1 parser validates metadata, confidence, limitations, and locations. Strict mode preserves malformed output as unfinished work.",
+      "source": [
+        {
+          "path": "ref_all_executor/structured_submit.py",
+          "symbol": "validate_submission_contract",
+          "line": 142
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "parse_agent_output",
+          "line": 3080
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._output_contract",
+          "line": 1222
+        }
+      ]
+    },
+    {
+      "title": "Evidence-backed candidate acceptance",
+      "description": "Check a finding against available source identity and explicit scope.",
+      "mechanism": "Promotion checks evidence, confidence, inventory membership, external hosts, and material supporting claimed validation.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/promotion_gates.py",
+          "symbol": "evaluate_finding_candidate",
+          "line": 12
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "CoverageStore.add_finding",
+          "line": 749
+        }
+      ]
+    },
+    {
+      "title": "Finding state and proof strength stay separate",
+      "description": "Distinguish a workflow decision from the quality of its evidence.",
+      "mechanism": "Six lifecycle states coexist with hypothesis, code-confirmed, and live-confirmed tiers. Valid promotion requires a live reproduction receipt.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "CoverageStore.transition_finding",
+          "line": 1008
+        }
+      ]
+    },
+    {
+      "title": "Negative conclusions need receipts",
+      "description": "Preserve the reason for rejection, duplicates, deferral, and downgrade.",
+      "mechanism": "Typed transition rules check supporting references, current state, pending obligations, and source freshness. Accepted and refused attempts remain stored.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "CoverageStore.transition_finding",
+          "line": 1008
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "_receipt_stale_reasons",
+          "line": 112
+        }
+      ]
+    },
+    {
+      "title": "Scoped action authorization",
+      "description": "Give operator grants a class, target scope, expiry, and conditions.",
+      "mechanism": "The broker checks applicable host, port, method, path, and effect conditions for presented requests. Backend launch obeys refusal. Grant authentication requires the configured operator token.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "CoverageStore.authorize_execution",
+          "line": 1458
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "_grant_refusal_reasons",
+          "line": 1764
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_capabilities.py",
+          "symbol": "require_capability_operator",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "title": "Persistent obligations",
+      "description": "Make missing access, blocked scope, incomplete proof, and failed output visible.",
+      "mechanism": "Pending actions carry source references, priority, ownership, status, and required receipts. The scheduler considers them before ordinary coverage.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "CoverageStore.create_pending_action",
+          "line": 1161
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "CoverageStore.finish_pending_action",
+          "line": 1243
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._create_failure_pending_action",
+          "line": 2837
+        }
+      ]
+    },
+    {
+      "title": "Continuity across sessions",
+      "description": "Resume a campaign from subject state rather than a conversation summary.",
+      "mechanism": "Loop state, module progress, blackboard notes, manifests, and checkpoints preserve execution context and input identities.",
+      "source": [
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._write_state",
+          "line": 2163
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._write_run_manifest",
+          "line": 2187
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._resume_preflight_refused",
+          "line": 2250
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/runtime_state.py",
+          "symbol": "resume_preflight",
+          "line": 346
+        }
+      ]
+    },
+    {
+      "title": "Archive before cleanup",
+      "description": "Retain trajectories and event streams before retiring completed conversations.",
+      "mechanism": "The loop creates durable artifacts and records archive or cleanup failures. Conversation lifetime is separate from evidence lifetime.",
+      "source": [
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._save_trajectory_artifact",
+          "line": 1554
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._archive_conversation_events",
+          "line": 1596
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._reap_conversation",
+          "line": 1628
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._retire_replaced_conversation",
+          "line": 2788
+        }
+      ]
+    },
+    {
+      "title": "Supervision for long campaigns",
+      "description": "Observe progress and recover a failed service within explicit policy.",
+      "mechanism": "Watchdog and supervisor passes examine liveness, failures, budgets, relevance, and evidence flow. Repeated recovery can produce an operator hold.",
+      "source": [
+        {
+          "path": "ref_all_executor/watchdog.py",
+          "symbol": "run_watchdog_subjects",
+          "line": 1299
+        },
+        {
+          "path": "ref_all_executor/supervisor.py",
+          "symbol": "RefallSupervisor.tick",
+          "line": 561
+        },
+        {
+          "path": "ref_all_executor/supervisor.py",
+          "symbol": "RefallSupervisor.check_escalation",
+          "line": 278
+        },
+        {
+          "path": "ref_all_executor/supervisor.py",
+          "symbol": "RefallSupervisor.engage_hold",
+          "line": 285
+        }
+      ]
+    },
+    {
+      "title": "Living reports and analyst notes",
+      "description": "Compile architecture, findings, flows, proof, and unanswered questions while research continues.",
+      "mechanism": "Report scheduling uses new evidence or a reserved slot. Analyst notes remain separate from the formal deliverable.",
+      "source": [
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._maybe_write_determinations",
+          "line": 1711
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._maybe_dispatch_report_agent",
+          "line": 1804
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._report_agent_objective",
+          "line": 1852
+        }
+      ]
+    },
+    {
+      "title": "Preserve accumulated report detail",
+      "description": "Protect populated technical sections from a thinner replacement.",
+      "mechanism": "Draft and assembly paths compare structure. A refused candidate can be retained for inspection while the richer report stays current.",
+      "source": [
+        {
+          "path": "ref_all_executor/report_enrich.py",
+          "symbol": "enrich_findings",
+          "line": 19
+        },
+        {
+          "path": "ref_all_executor/report_draft.py",
+          "symbol": "_structural_downgrade_sections",
+          "line": 476
+        },
+        {
+          "path": "ref_all_executor/report_assemble.py",
+          "symbol": "assemble_report",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "title": "Checked closeout",
+      "description": "Show the exact completion barriers and advisory warnings.",
+      "mechanism": "The gate checks obligations, proof, receipts, context, leases, and report freshness. Explicit overrides remain evidence records.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/closeout_gate.py",
+          "symbol": "evaluate_closeout_gate",
+          "line": 14
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/closeout_gate.py",
+          "symbol": "_report_check",
+          "line": 193
+        },
+        {
+          "path": "ref_all_executor/loop_manager.py",
+          "symbol": "RefallLoopManager.closeout",
+          "line": 81
+        }
+      ]
+    },
+    {
+      "title": "Compiled-binary research family",
+      "description": "Move from import callers to independent review and runtime proof.",
+      "mechanism": "Standalone compatibility drivers seed function investigations, decompile and branch, challenge reachability, and compile reproduction artifacts.",
+      "source": [
+        {
+          "path": "coverage_service/binary.py",
+          "symbol": "seed_binary",
+          "line": 159
+        },
+        {
+          "path": "drive_binresearch.py",
+          "symbol": "_objective",
+          "line": 27
+        },
+        {
+          "path": "drive_binreview.py",
+          "symbol": "_objective",
+          "line": 31
+        },
+        {
+          "path": "drive_binvalidate.py",
+          "symbol": "needs_validation",
+          "line": 34
+        }
+      ]
+    },
+    {
+      "title": "Optional analysis resources",
+      "description": "Use semantic tools, symbol indexes, graphs, metrics, and focused property-graph analysis.",
+      "mechanism": "The installable toolchain supplies source analysis and managed MCP services. Subject tasks select the resources they need.",
+      "source": [
+        {
+          "path": "toolchain/run.sh",
+          "symbol": "",
+          "line": 1
+        },
+        {
+          "path": "toolchain/install.sh",
+          "symbol": "",
+          "line": 1
+        },
+        {
+          "path": "toolchain/config/services.json",
+          "symbol": "",
+          "line": 1
+        }
+      ]
+    },
+    {
+      "title": "Research ledger and Output view",
+      "description": "Facts, leads, findings, validation, and operator decisions remain with the subject after individual conversations end.",
+      "mechanism": "An append-only JSONL ledger supplies filtered queries, statistics, the Ops Output projection, and report inputs. Finding and authority APIs manage their separate state transitions.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/ledger.py",
+          "symbol": "append_entry",
+          "line": 41,
+          "endLine": 57
+        },
+        {
+          "path": "arcticbase/frontend/src/lib/refall/WorkbenchOpsPanel.svelte",
+          "symbol": "Ledger and Output views",
+          "line": 953,
+          "endLine": 1034
+        }
+      ]
+    },
+    {
+      "title": "Wishlist fulfillment and delivered-resource briefing",
+      "description": "Missing tools and other research resources become explicit requests with recorded delivery.",
+      "mechanism": "The watchdog checks host executables, optionally runs allowlisted installers, and appends provided rows and ledger receipts. Head cycles and research-driver startup snapshots carry delivered items into their own worker objectives.",
+      "source": [
+        {
+          "path": "ref_all_executor/watchdog.py",
+          "symbol": "_handle_wishlist",
+          "line": 903,
+          "endLine": 964
+        },
+        {
+          "path": "ref_all_executor/watchdog.py",
+          "symbol": "_record_wishlist_provided",
+          "line": 966,
+          "endLine": 993
+        },
+        {
+          "path": "ref_all_executor/wishlist.py",
+          "symbol": "format_provided_wishlist",
+          "line": 4,
+          "endLine": 21
+        },
+        {
+          "path": "ref_all_executor/head_orchestrator.py",
+          "symbol": "run_cycle",
+          "line": 40
+        }
+      ]
+    },
+    {
+      "title": "Campaign cycles and target-specific passes",
+      "description": "A coordinator cycle, a module pass, a worker retry, and report or supervision review have distinct state and completion conditions.",
+      "mechanism": "Pending actions preempt setup, fresh breadth, finding work, and later unit work. Target-local dependencies and completion records govern module eligibility. Coordinator limits preserve active work for continuation.",
+      "source": [
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "_claim_next_task",
+          "line": 590,
+          "endLine": 636
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "run",
+          "line": 442
+        },
+        {
+          "path": "ref_all_executor/work_modules.py",
+          "symbol": "WorkModule",
+          "line": 46
+        },
+        {
+          "path": "ref_all_executor/work_modules.py",
+          "symbol": "next_unit_module",
+          "line": 472
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "campaign-cycle",
+      "title": "The campaign cycle",
+      "summary": "One coordinator pass selects work, polls conversations, retains evidence, refreshes records, and saves continuation state. A dashed return represents another eligible coordinator cycle.",
+      "diagram": {
+        "nodes": [
+          {
+            "id": "select",
+            "title": "Select recorded work",
+            "role": "Claim worker-eligible pending actions first. Then consider threat-model or subject setup, fresh coverage, finding work, and later unit modules.",
+            "layer": "Selection",
+            "source": [
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "_claim_next_task",
+                "line": 590,
+                "endLine": 636
+              }
+            ]
+          },
+          {
+            "id": "dispatch",
+            "title": "Dispatch bounded work",
+            "role": "Prepare the task workspace and provider lane. Send the task objective with its conversation iteration limit.",
+            "layer": "Execution",
+            "source": [
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "start",
+                "line": 205
+              }
+            ]
+          },
+          {
+            "id": "poll",
+            "title": "Poll active conversations",
+            "role": "Read active worker status. Ingest available events and structured files while a conversation remains active.",
+            "layer": "Execution",
+            "source": [
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "run",
+                "line": 442
+              },
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "_incremental_ingest",
+                "line": 1115
+              }
+            ]
+          },
+          {
+            "id": "retain",
+            "title": "Retain evidence and decide",
+            "role": "Classify terminal results, parse output, check submission identity, and retain useful observations before outcome handling. Completion and retry use their own checks.",
+            "layer": "Evidence and decisions",
+            "source": [
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "_finish_conversation",
+                "line": 1378
+              }
+            ]
+          },
+          {
+            "id": "refresh",
+            "title": "Refresh shared records",
+            "role": "Update determinations and applicable report state. Report and visualization workers have their own cadence and slot rules.",
+            "layer": "Evidence and decisions",
+            "source": [
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "_maybe_write_determinations",
+                "line": 1711
+              },
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "_maybe_refresh_report",
+                "line": 1769
+              },
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "_maybe_dispatch_report_agent",
+                "line": 1804
+              }
+            ]
+          },
+          {
+            "id": "save",
+            "title": "Save and continue or return",
+            "role": "Persist active conversations and coordinator state. Module completion has a separate progress store. Continue when configured and eligible; idle, stalls, or limits can return control.",
+            "layer": "Continuation",
+            "source": [
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "_write_state",
+                "line": 2163
+              },
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "run",
+                "line": 442
+              },
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "_save_module_progress",
+                "line": 429,
+                "endLine": 440
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "from": "select",
+            "to": "dispatch",
+            "label": ""
+          },
+          {
+            "from": "dispatch",
+            "to": "poll",
+            "label": ""
+          },
+          {
+            "from": "poll",
+            "to": "retain",
+            "label": ""
+          },
+          {
+            "from": "retain",
+            "to": "refresh",
+            "label": ""
+          },
+          {
+            "from": "refresh",
+            "to": "save",
+            "label": ""
+          },
+          {
+            "from": "save",
+            "to": "select",
+            "label": "another coordinator cycle",
+            "feedback": true
+          }
+        ]
+      },
+      "steps": [
+        {
+          "title": "Select recorded work",
+          "detail": "Claim worker-eligible pending actions first. Then consider threat-model or subject setup, fresh coverage, finding work, and later unit modules.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_claim_next_task",
+              "line": 590,
+              "endLine": 636
+            }
+          ]
+        },
+        {
+          "title": "Dispatch bounded work",
+          "detail": "Prepare the task workspace and provider lane. Send the task objective with its conversation iteration limit.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "start",
+              "line": 205
+            }
+          ]
+        },
+        {
+          "title": "Poll active conversations",
+          "detail": "Read active worker status. Ingest available events and structured files while a conversation remains active.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "run",
+              "line": 442
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_incremental_ingest",
+              "line": 1115
+            }
+          ]
+        },
+        {
+          "title": "Retain evidence and decide",
+          "detail": "Classify terminal results, parse output, check submission identity, and retain useful observations before outcome handling. Completion and retry use their own checks.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_finish_conversation",
+              "line": 1378
+            }
+          ]
+        },
+        {
+          "title": "Refresh shared records",
+          "detail": "Update determinations and applicable report state. Report and visualization workers have their own cadence and slot rules.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_maybe_write_determinations",
+              "line": 1711
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_maybe_refresh_report",
+              "line": 1769
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_maybe_dispatch_report_agent",
+              "line": 1804
+            }
+          ]
+        },
+        {
+          "title": "Save and continue or return",
+          "detail": "Persist active conversations and coordinator state. Module completion has a separate progress store. Continue when configured and eligible; idle, stalls, or limits can return control.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_write_state",
+              "line": 2163
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "run",
+              "line": 442
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_save_module_progress",
+              "line": 429,
+              "endLine": 440
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "target-passes",
+      "title": "Passes on one target",
+      "summary": "Example security-pack path. Unit dependencies are local to that unit. Finding verification targets finding records; review does not have to produce a finding.",
+      "diagram": {
+        "nodes": [
+          {
+            "id": "characterize",
+            "title": "Characterize a unit",
+            "role": "Default security assessment pulls in characterization through its dependencies. Explicit baseline selection supports characterization-only work.",
+            "layer": "Coverage target",
+            "source": [
+              {
+                "path": "ref_all_executor/work_modules.py",
+                "symbol": "PACKS.security_assessment",
+                "line": 142,
+                "endLine": 157
+              },
+              {
+                "path": "ref_all_executor/work_modules.py",
+                "symbol": "ModuleRegistry",
+                "line": 211
+              },
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "_task_for_characterize",
+                "line": 653
+              },
+              {
+                "path": "ref_all_executor/work_modules.py",
+                "symbol": "ModuleRegistry executable default",
+                "line": 235,
+                "endLine": 249
+              }
+            ]
+          },
+          {
+            "id": "recon",
+            "title": "Map its attack surface",
+            "role": "The security reconnaissance module follows characterization on the same target. Identify inputs, parsers, privileges, and trust boundaries.",
+            "layer": "Coverage target",
+            "source": [
+              {
+                "path": "ref_all_executor/work_modules.py",
+                "symbol": "PACKS.security_assessment",
+                "line": 142,
+                "endLine": 157
+              },
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "_task_for_unit_module",
+                "line": 676
+              },
+              {
+                "path": "ref_all_executor/work_modules.py",
+                "symbol": "next_unit_module",
+                "line": 472
+              }
+            ]
+          },
+          {
+            "id": "review",
+            "title": "Review concrete risks",
+            "role": "The security review module follows reconnaissance for that unit. Retain source evidence and candidate findings through the corresponding persistence paths.",
+            "layer": "Coverage target",
+            "source": [
+              {
+                "path": "ref_all_executor/work_modules.py",
+                "symbol": "PACKS.security_assessment",
+                "line": 142,
+                "endLine": 157
+              },
+              {
+                "path": "ref_all_executor/work_modules.py",
+                "symbol": "next_unit_module",
+                "line": 472
+              },
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "_persist_findings",
+                "line": 2457
+              }
+            ]
+          },
+          {
+            "id": "verify",
+            "title": "Select finding verification",
+            "role": "When an eligible finding exists and finding work is selected, the security verification module receives that finding as its target.",
+            "layer": "Finding target",
+            "source": [
+              {
+                "path": "ref_all_executor/work_modules.py",
+                "symbol": "PACKS.security_assessment",
+                "line": 142,
+                "endLine": 157
+              },
+              {
+                "path": "ref_all_executor/work_modules.py",
+                "symbol": "next_finding_module",
+                "line": 493
+              },
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "_task_for_finding_module",
+                "line": 744
+              }
+            ]
+          },
+          {
+            "id": "decide",
+            "title": "Record an evidence-backed decision",
+            "role": "Promotion and disposition use their own evidence and receipt checks. Accepted and refused decisions remain available to later work and closeout.",
+            "layer": "Decision",
+            "source": [
+              {
+                "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+                "symbol": "transition_finding",
+                "line": 1008
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "from": "characterize",
+            "to": "recon",
+            "label": "same-unit dependency"
+          },
+          {
+            "from": "recon",
+            "to": "review",
+            "label": "same-unit dependency"
+          },
+          {
+            "from": "review",
+            "to": "verify",
+            "label": "candidate finding available"
+          },
+          {
+            "from": "verify",
+            "to": "decide",
+            "label": "verification result"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "title": "Characterize a unit",
+          "detail": "Default security assessment pulls in characterization through its dependencies. Explicit baseline selection supports characterization-only work.",
+          "source": [
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "PACKS.security_assessment",
+              "line": 142,
+              "endLine": 157
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "ModuleRegistry",
+              "line": 211
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_task_for_characterize",
+              "line": 653
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "ModuleRegistry executable default",
+              "line": 235,
+              "endLine": 249
+            }
+          ]
+        },
+        {
+          "title": "Map its attack surface",
+          "detail": "The security reconnaissance module follows characterization on the same target. Identify inputs, parsers, privileges, and trust boundaries.",
+          "source": [
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "PACKS.security_assessment",
+              "line": 142,
+              "endLine": 157
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_task_for_unit_module",
+              "line": 676
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "next_unit_module",
+              "line": 472
+            }
+          ]
+        },
+        {
+          "title": "Review concrete risks",
+          "detail": "The security review module follows reconnaissance for that unit. Retain source evidence and candidate findings through the corresponding persistence paths.",
+          "source": [
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "PACKS.security_assessment",
+              "line": 142,
+              "endLine": 157
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "next_unit_module",
+              "line": 472
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_persist_findings",
+              "line": 2457
+            }
+          ]
+        },
+        {
+          "title": "Select finding verification",
+          "detail": "When an eligible finding exists and finding work is selected, the security verification module receives that finding as its target.",
+          "source": [
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "PACKS.security_assessment",
+              "line": 142,
+              "endLine": 157
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "next_finding_module",
+              "line": 493
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_task_for_finding_module",
+              "line": 744
+            }
+          ]
+        },
+        {
+          "title": "Record an evidence-backed decision",
+          "detail": "Promotion and disposition use their own evidence and receipt checks. Accepted and refused decisions remain available to later work and closeout.",
+          "source": [
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "transition_finding",
+              "line": 1008
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wishlist-feedback",
+      "title": "The resource feedback cycle",
+      "summary": "Tool delivery is a recorded resource workflow. Head cycles reread delivered items; compatibility research drivers load them at startup. The standing scheduler selects its own work queues.",
+      "diagram": {
+        "nodes": [
+          {
+            "id": "need",
+            "title": "Record a resource need",
+            "role": "Create an open wishlist item with its kind, item, reason, and requester. Access and data needs can remain for operator handling.",
+            "layer": "Request",
+            "source": [
+              {
+                "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+                "symbol": "add_wishlist_item",
+                "line": 1490,
+                "endLine": 1512
+              }
+            ]
+          },
+          {
+            "id": "check",
+            "title": "Check host availability",
+            "role": "The watchdog reads open and provided records. It skips matching provided tools and checks the host executable path for supported request kinds.",
+            "layer": "Fulfillment",
+            "source": [
+              {
+                "path": "ref_all_executor/watchdog.py",
+                "symbol": "_handle_wishlist",
+                "line": 903,
+                "endLine": 964
+              }
+            ]
+          },
+          {
+            "id": "install",
+            "title": "Provide a supported tool",
+            "role": "An already available executable can be recorded as provided. When enabled, a fixed allowlisted installer can supply a missing tool; success must pass an executable check. Unhandled requests remain visible.",
+            "layer": "Fulfillment",
+            "source": [
+              {
+                "path": "ref_all_executor/watchdog.py",
+                "symbol": "_handle_wishlist",
+                "line": 903,
+                "endLine": 964
+              },
+              {
+                "path": "ref_all_executor/watchdog.py",
+                "symbol": "_install_wishlist_tool",
+                "line": 995
+              }
+            ]
+          },
+          {
+            "id": "receipt",
+            "title": "Record delivery and its receipt",
+            "role": "Append a new provided row and an ops-event ledger receipt linking the source request and delivery. The original request remains in history.",
+            "layer": "Persistent records",
+            "source": [
+              {
+                "path": "ref_all_executor/watchdog.py",
+                "symbol": "_record_wishlist_provided",
+                "line": 966,
+                "endLine": 993
+              },
+              {
+                "path": "arcticbase/backend/src/arctic_base/refall/ledger.py",
+                "symbol": "append_entry",
+                "line": 41,
+                "endLine": 57
+              }
+            ]
+          },
+          {
+            "id": "brief",
+            "title": "Brief later workers",
+            "role": "Each head cycle reads provided items. The research driver and three binary drivers include their startup snapshot in worker objectives, with instructions to avoid duplicate requests.",
+            "layer": "Reuse",
+            "source": [
+              {
+                "path": "ref_all_executor/head_orchestrator.py",
+                "symbol": "run_cycle",
+                "line": 40
+              },
+              {
+                "path": "ref_all_executor/wishlist.py",
+                "symbol": "format_provided_wishlist",
+                "line": 4
+              }
+            ]
+          },
+          {
+            "id": "research",
+            "title": "Continue authorized research",
+            "role": "Use resources in the appropriate host or worker environment. Resolve related obligations and obtain any required action grants through their separate APIs. A later need can create another wish.",
+            "layer": "Research",
+            "source": [
+              {
+                "path": "ref_all_executor/standing_loop.py",
+                "symbol": "_claim_pending_action",
+                "line": 1987
+              },
+              {
+                "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+                "symbol": "authorize_execution",
+                "line": 1458
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "from": "need",
+            "to": "check",
+            "label": ""
+          },
+          {
+            "from": "check",
+            "to": "install",
+            "label": ""
+          },
+          {
+            "from": "install",
+            "to": "receipt",
+            "label": "provided or installation succeeds"
+          },
+          {
+            "from": "receipt",
+            "to": "brief",
+            "label": ""
+          },
+          {
+            "from": "brief",
+            "to": "research",
+            "label": ""
+          },
+          {
+            "from": "research",
+            "to": "need",
+            "label": "a new resource need",
+            "feedback": true
+          }
+        ]
+      },
+      "steps": [
+        {
+          "title": "Record a resource need",
+          "detail": "Create an open wishlist item with its kind, item, reason, and requester. Access and data needs can remain for operator handling.",
+          "source": [
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "add_wishlist_item",
+              "line": 1490,
+              "endLine": 1512
+            }
+          ]
+        },
+        {
+          "title": "Check host availability",
+          "detail": "The watchdog reads open and provided records. It skips matching provided tools and checks the host executable path for supported request kinds.",
+          "source": [
+            {
+              "path": "ref_all_executor/watchdog.py",
+              "symbol": "_handle_wishlist",
+              "line": 903,
+              "endLine": 964
+            }
+          ]
+        },
+        {
+          "title": "Provide a supported tool",
+          "detail": "An already available executable can be recorded as provided. When enabled, a fixed allowlisted installer can supply a missing tool; success must pass an executable check. Unhandled requests remain visible.",
+          "source": [
+            {
+              "path": "ref_all_executor/watchdog.py",
+              "symbol": "_handle_wishlist",
+              "line": 903,
+              "endLine": 964
+            },
+            {
+              "path": "ref_all_executor/watchdog.py",
+              "symbol": "_install_wishlist_tool",
+              "line": 995
+            }
+          ]
+        },
+        {
+          "title": "Record delivery and its receipt",
+          "detail": "Append a new provided row and an ops-event ledger receipt linking the source request and delivery. The original request remains in history.",
+          "source": [
+            {
+              "path": "ref_all_executor/watchdog.py",
+              "symbol": "_record_wishlist_provided",
+              "line": 966,
+              "endLine": 993
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/ledger.py",
+              "symbol": "append_entry",
+              "line": 41,
+              "endLine": 57
+            }
+          ]
+        },
+        {
+          "title": "Brief later workers",
+          "detail": "Each head cycle reads provided items. The research driver and three binary drivers include their startup snapshot in worker objectives, with instructions to avoid duplicate requests.",
+          "source": [
+            {
+              "path": "ref_all_executor/head_orchestrator.py",
+              "symbol": "run_cycle",
+              "line": 40
+            },
+            {
+              "path": "ref_all_executor/wishlist.py",
+              "symbol": "format_provided_wishlist",
+              "line": 4
+            }
+          ]
+        },
+        {
+          "title": "Continue authorized research",
+          "detail": "Use resources in the appropriate host or worker environment. Resolve related obligations and obtain any required action grants through their separate APIs. A later need can create another wish.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_claim_pending_action",
+              "line": 1987
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "authorize_execution",
+              "line": 1458
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "subject-to-research",
+      "title": "From operator intent to bounded work",
+      "summary": "The normal workbench lifecycle reaches one authorized backend launch path and a persistent scheduler.",
+      "steps": [
+        {
+          "title": "Create the subject",
+          "detail": "Attach the source path to a subject workbench with its own research state.",
+          "source": [
+            {
+              "path": "arcticbase/backend/src/arctic_base/api/refall_subjects.py",
+              "symbol": "",
+              "line": 1
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "CoverageStore",
+              "line": 332
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/ledger.py",
+              "symbol": "append_entry",
+              "line": 41
+            }
+          ]
+        },
+        {
+          "title": "Compile shared context",
+          "detail": "Generate a briefing from selected source material, metadata, workbench text, and operator direction.",
+          "source": [
+            {
+              "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+              "symbol": "_context_subject",
+              "line": 978
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+              "symbol": "_context_materials",
+              "line": 1269
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+              "symbol": "_run_context_writer",
+              "line": 1064
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+              "symbol": "_save_context_artifacts",
+              "line": 1419
+            }
+          ]
+        },
+        {
+          "title": "Select work and scope",
+          "detail": "Choose packs, custom modules, path rules, scope constraints, and optional threat-model work.",
+          "source": [
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "load_subject_config",
+              "line": 522
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "ModuleRegistry.from_config",
+              "line": 217
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "ModuleRegistry._assert_acyclic",
+              "line": 301
+            }
+          ]
+        },
+        {
+          "title": "Check readiness",
+          "detail": "Inspect providers, services, paths, capabilities, and remaining work through Doctor and Estimate.",
+          "source": [
+            {
+              "path": "ref_all_executor/doctor.py",
+              "symbol": "doctor",
+              "line": 26
+            },
+            {
+              "path": "ref_all_executor/estimate.py",
+              "symbol": "estimate_subject",
+              "line": 9
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+              "symbol": "_doctor_payload",
+              "line": 700
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+              "symbol": "_estimate_subject",
+              "line": 738
+            }
+          ]
+        },
+        {
+          "title": "Authorize launch",
+          "detail": "Compare the process request and subject path with a grant. Refusal blocks backend launch. Grant authentication activates with the configured operator token.",
+          "source": [
+            {
+              "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+              "symbol": "_authorize_process_launch",
+              "line": 366
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+              "symbol": "_launch_standing_loop",
+              "line": 424
+            }
+          ]
+        },
+        {
+          "title": "Prepare the execution workspace",
+          "detail": "Reuse the source mount or copy its snapshot. Create separate writable task scratch.",
+          "source": [
+            {
+              "path": "ref_all_executor/agent_workspace.py",
+              "symbol": "sync_agent_canvas_workspace",
+              "line": 17
+            },
+            {
+              "path": "ref_all_executor/config.py",
+              "symbol": "prepare_subject_agent_workspace",
+              "line": 207
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "AgentCanvasDispatcher.start",
+              "line": 205
+            }
+          ]
+        },
+        {
+          "title": "Inventory the material",
+          "detail": "Record file identity and establish coverage units; request a plan for binary-only intake.",
+          "source": [
+            {
+              "path": "ref_all_executor/source_inventory.py",
+              "symbol": "build_source_inventory",
+              "line": 66
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._auto_enumerate_if_empty",
+              "line": 1654
+            }
+          ]
+        },
+        {
+          "title": "Choose the next target",
+          "detail": "Prioritize obligations and subject setup. Claim fresh breadth directly before eligible finding work and later unit passes.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._claim_next_task",
+              "line": 590
+            }
+          ]
+        },
+        {
+          "title": "Build the task contract",
+          "detail": "Combine context, scope, shared notes, the selected target, module intent, and required outputs.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._objective",
+              "line": 888
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._task_for_unit_module",
+              "line": 676
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_with_resource_context",
+              "line": 180
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_with_workspace_context",
+              "line": 187
+            }
+          ]
+        },
+        {
+          "title": "Dispatch a specialist",
+          "detail": "Start the configured conversation with its lane, workspace, objective, and iteration limit.",
+          "source": [
+            {
+              "path": "ref_all_executor/router.py",
+              "symbol": "route",
+              "line": 49
+            },
+            {
+              "path": "ref_all_executor/config.py",
+              "symbol": "",
+              "line": 1
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._next_dispatch_lane",
+              "line": 379
+            },
+            {
+              "path": "ref_all_executor/agent_workspace.py",
+              "symbol": "sync_agent_canvas_workspace",
+              "line": 17
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "worker-to-evidence",
+      "title": "From worker output to reviewable evidence",
+      "summary": "Observations are captured independently of whether the worker can complete its assignment.",
+      "steps": [
+        {
+          "title": "Read active messages",
+          "detail": "Collect agent-authored message and action text from persisted conversation events.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "read_conversation_agent_text",
+              "line": 131
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._incremental_ingest",
+              "line": 1115
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._merge_submission_file",
+              "line": 965
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._register_workspace_artifact",
+              "line": 1010
+            }
+          ]
+        },
+        {
+          "title": "Read saved results",
+          "detail": "Merge structured submissions from the workspace and register useful analysis files.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "read_conversation_agent_text",
+              "line": 131
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._incremental_ingest",
+              "line": 1115
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._merge_submission_file",
+              "line": 965
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._register_workspace_artifact",
+              "line": 1010
+            }
+          ]
+        },
+        {
+          "title": "Normalize the result",
+          "detail": "Parse typed envelopes and supported facts, leads, findings, flows, and determination fields.",
+          "source": [
+            {
+              "path": "ref_all_executor/structured_submit.py",
+              "symbol": "validate_submission_contract",
+              "line": 142
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "parse_agent_output",
+              "line": 3080
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._output_contract",
+              "line": 1222
+            }
+          ]
+        },
+        {
+          "title": "Prevent repeated ingestion",
+          "detail": "Use stable observation keys and persistent submission identities across live and terminal paths.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._persist_new_intel",
+              "line": 1073
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._structured_submissions_already_applied",
+              "line": 2691
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._record_structured_submissions",
+              "line": 2701
+            }
+          ]
+        },
+        {
+          "title": "Store canonical evidence",
+          "detail": "Append ledger records and preserve finding locations, artifacts, and scheduler inputs.",
+          "source": [
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "CoverageStore._find_canonical_finding",
+              "line": 910
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "_finding_dedup_key",
+              "line": 1648
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "_merge_related_locations",
+              "line": 1678
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/projection.py",
+              "symbol": "project_runtime_events",
+              "line": 14
+            }
+          ]
+        },
+        {
+          "title": "Evaluate completion separately",
+          "detail": "Classify the invocation, parse output, and check submission identity. Preserve observations before handling success, scheduling repair, or creating obligations.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._finish_conversation",
+              "line": 1378
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._salvage_intel",
+              "line": 1038
+            }
+          ]
+        },
+        {
+          "title": "Retain unfinished obligations",
+          "detail": "Create pending actions for failed output, missing proof, access requests, or empty subject passes.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._block_empty_subject_module_completion",
+              "line": 1161
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "CoverageStore.create_pending_action",
+              "line": 1161
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "CoverageStore.finish_pending_action",
+              "line": 1243
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._create_failure_pending_action",
+              "line": 2837
+            }
+          ]
+        },
+        {
+          "title": "Validate the candidate",
+          "detail": "Check evidence, confidence, source membership, scope, and claimed verification material.",
+          "source": [
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/promotion_gates.py",
+              "symbol": "evaluate_finding_candidate",
+              "line": 12
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "CoverageStore.add_finding",
+              "line": 749
+            }
+          ]
+        },
+        {
+          "title": "Record the disposition",
+          "detail": "Require the appropriate receipt for promotion, suppression, duplicates, deferral, and quality changes.",
+          "source": [
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "CoverageStore.transition_finding",
+              "line": 1008
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "_receipt_stale_reasons",
+              "line": 112
+            }
+          ]
+        },
+        {
+          "title": "Archive before retirement",
+          "detail": "Save trajectory and event records before conversation cleanup.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._save_trajectory_artifact",
+              "line": 1554
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._archive_conversation_events",
+              "line": 1596
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._reap_conversation",
+              "line": 1628
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._retire_replaced_conversation",
+              "line": 2788
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "adapt-the-campaign",
+      "title": "Adapt one campaign to its subject",
+      "summary": "Work declarations connect broad examination with focused research without a global phase counter.",
+      "steps": [
+        {
+          "title": "Select the target family",
+          "detail": "Use the whole subject, coverage units, or findings as the work source.",
+          "source": [
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "WorkModule",
+              "line": 46
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "eligible_modules",
+              "line": 333
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "ModuleScheduler",
+              "line": 386
+            }
+          ]
+        },
+        {
+          "title": "Compose packs",
+          "detail": "Combine characterization, reverse engineering, security, research, development, or analysis packs.",
+          "source": [
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "ModuleRegistry.from_config",
+              "line": 217
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "pack_names",
+              "line": 195
+            }
+          ]
+        },
+        {
+          "title": "Add local questions",
+          "detail": "Declare a custom module with its task class and bounded objective.",
+          "source": [
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "load_subject_config",
+              "line": 522
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "ModuleRegistry.from_config",
+              "line": 217
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "ModuleRegistry._assert_acyclic",
+              "line": 301
+            }
+          ]
+        },
+        {
+          "title": "Constrain expensive work",
+          "detail": "Apply path globs to later unit passes and module concurrency limits to subject, finding, and later unit selection.",
+          "source": [
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "WorkModule",
+              "line": 46
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "eligible_modules",
+              "line": 333
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "ModuleScheduler",
+              "line": 386
+            }
+          ]
+        },
+        {
+          "title": "Resolve prerequisites",
+          "detail": "Add built-in dependencies and reject unknown or cyclic module relationships.",
+          "source": [
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "load_subject_config",
+              "line": 522
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "ModuleRegistry.from_config",
+              "line": 217
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "ModuleRegistry._assert_acyclic",
+              "line": 301
+            }
+          ]
+        },
+        {
+          "title": "Establish breadth",
+          "detail": "Claim fresh coverage units directly and dispatch characterization under the global concurrency limit.",
+          "source": [
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "partition_file",
+              "line": 240
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "CoverageStore.claim_next",
+              "line": 390
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "CoverageStore.submit",
+              "line": 413
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "CoverageStore.coverage",
+              "line": 504
+            }
+          ]
+        },
+        {
+          "title": "Reuse earlier results",
+          "detail": "Supply prior summaries, findings, shared notes, and artifacts to follow-on passes.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._objective",
+              "line": 888
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._task_for_unit_module",
+              "line": 676
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_with_resource_context",
+              "line": 180
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "_with_workspace_context",
+              "line": 187
+            }
+          ]
+        },
+        {
+          "title": "Challenge findings",
+          "detail": "Dispatch finding-specific verification or patch work when eligible.",
+          "source": [
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "WorkModule",
+              "line": 46
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "eligible_modules",
+              "line": 333
+            },
+            {
+              "path": "ref_all_executor/work_modules.py",
+              "symbol": "ModuleScheduler",
+              "line": 386
+            }
+          ]
+        },
+        {
+          "title": "Select required tools",
+          "detail": "Install and start supporting analysis resources only for the subject work that needs them.",
+          "source": [
+            {
+              "path": "toolchain/run.sh",
+              "symbol": "",
+              "line": 1
+            },
+            {
+              "path": "toolchain/install.sh",
+              "symbol": "",
+              "line": 1
+            },
+            {
+              "path": "toolchain/config/services.json",
+              "symbol": "",
+              "line": 1
+            }
+          ]
+        },
+        {
+          "title": "Persist target progress",
+          "detail": "Save completed module identifiers and known targets so later execution continues from the same state.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._write_state",
+              "line": 2163
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._write_run_manifest",
+              "line": 2187
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._resume_preflight_refused",
+              "line": 2250
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/runtime_state.py",
+              "symbol": "resume_preflight",
+              "line": 346
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "continuity-to-closeout",
+      "title": "From long-running research to checked publication",
+      "summary": "Persistent execution state and report state preserve both the work and the conditions for accepting it.",
+      "steps": [
+        {
+          "title": "Record run identity",
+          "detail": "Store active conversations, source identities, lane configuration, stage state, and checkpoints.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._write_state",
+              "line": 2163
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._write_run_manifest",
+              "line": 2187
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._resume_preflight_refused",
+              "line": 2250
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/runtime_state.py",
+              "symbol": "resume_preflight",
+              "line": 346
+            }
+          ]
+        },
+        {
+          "title": "Handle temporary failure",
+          "detail": "Apply transport retry or classified worker repair within the configured limits.",
+          "source": [
+            {
+              "path": "ref_all_executor/http_retry.py",
+              "symbol": "with_retry",
+              "line": 30
+            },
+            {
+              "path": "ref_all_executor/runtime_invocation.py",
+              "symbol": "classify_invocation",
+              "line": 23
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._start_retry",
+              "line": 2720
+            }
+          ]
+        },
+        {
+          "title": "Escalate unresolved conditions",
+          "detail": "Preserve scope, capability, exhausted retry, or recovery decisions as visible obligations.",
+          "source": [
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "CoverageStore.create_pending_action",
+              "line": 1161
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+              "symbol": "CoverageStore.finish_pending_action",
+              "line": 1243
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._create_failure_pending_action",
+              "line": 2837
+            },
+            {
+              "path": "ref_all_executor/watchdog.py",
+              "symbol": "run_watchdog_subjects",
+              "line": 1299
+            }
+          ]
+        },
+        {
+          "title": "Check resumed inputs",
+          "detail": "Compare checkpoint hashes before continuing active work.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._write_state",
+              "line": 2163
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._write_run_manifest",
+              "line": 2187
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._resume_preflight_refused",
+              "line": 2250
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/runtime_state.py",
+              "symbol": "resume_preflight",
+              "line": 346
+            }
+          ]
+        },
+        {
+          "title": "Compile developing understanding",
+          "detail": "Update determinations, evidence counts, the living report, and analyst notes.",
+          "source": [
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._maybe_write_determinations",
+              "line": 1711
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._maybe_dispatch_report_agent",
+              "line": 1804
+            },
+            {
+              "path": "ref_all_executor/standing_loop.py",
+              "symbol": "RefallStandingLoop._report_agent_objective",
+              "line": 1852
+            }
+          ]
+        },
+        {
+          "title": "Enrich from evidence",
+          "detail": "Group facts, retain related locations, and include runtime proof and decision records.",
+          "source": [
+            {
+              "path": "ref_all_executor/report_enrich.py",
+              "symbol": "enrich_findings",
+              "line": 19
+            },
+            {
+              "path": "ref_all_executor/report_draft.py",
+              "symbol": "_structural_downgrade_sections",
+              "line": 476
+            },
+            {
+              "path": "ref_all_executor/report_assemble.py",
+              "symbol": "assemble_report",
+              "line": 16
+            }
+          ]
+        },
+        {
+          "title": "Protect the current report",
+          "detail": "Compare populated sections before replacing the selected report object.",
+          "source": [
+            {
+              "path": "ref_all_executor/report_enrich.py",
+              "symbol": "enrich_findings",
+              "line": 19
+            },
+            {
+              "path": "ref_all_executor/report_draft.py",
+              "symbol": "_structural_downgrade_sections",
+              "line": 476
+            },
+            {
+              "path": "ref_all_executor/report_assemble.py",
+              "symbol": "assemble_report",
+              "line": 16
+            }
+          ]
+        },
+        {
+          "title": "Refresh the authoritative draft",
+          "detail": "Include evidence written during enrichment before evaluating publication freshness.",
+          "source": [
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/closeout_gate.py",
+              "symbol": "evaluate_closeout_gate",
+              "line": 14
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/closeout_gate.py",
+              "symbol": "_report_check",
+              "line": 193
+            },
+            {
+              "path": "ref_all_executor/loop_manager.py",
+              "symbol": "RefallLoopManager.closeout",
+              "line": 81
+            }
+          ]
+        },
+        {
+          "title": "Evaluate completion",
+          "detail": "Inspect blocking obligations, validation, receipts, claims, context, and report freshness.",
+          "source": [
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/closeout_gate.py",
+              "symbol": "evaluate_closeout_gate",
+              "line": 14
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/closeout_gate.py",
+              "symbol": "_report_check",
+              "line": 193
+            },
+            {
+              "path": "ref_all_executor/loop_manager.py",
+              "symbol": "RefallLoopManager.closeout",
+              "line": 81
+            }
+          ]
+        },
+        {
+          "title": "Record the accepted outcome",
+          "detail": "Resolve barriers or record explicit override receipts, then preserve the closeout decision.",
+          "source": [
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/closeout_gate.py",
+              "symbol": "evaluate_closeout_gate",
+              "line": 14
+            },
+            {
+              "path": "arcticbase/backend/src/arctic_base/refall/closeout_gate.py",
+              "symbol": "_report_check",
+              "line": 193
+            },
+            {
+              "path": "ref_all_executor/loop_manager.py",
+              "symbol": "RefallLoopManager.closeout",
+              "line": 81
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "architecture": {
+    "nodes": [
+      {
+        "id": "operator",
+        "title": "Operator",
+        "role": "Defines objective, scope, resource authority, and exceptions.",
+        "layer": "control",
+        "source": [
+          {
+            "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+            "symbol": "_authorize_process_launch",
+            "line": 366
+          },
+          {
+            "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+            "symbol": "_launch_standing_loop",
+            "line": 424
+          }
+        ]
+      },
+      {
+        "id": "console",
+        "title": "Workbench console",
+        "role": "Presents context, coverage, evidence, decisions, and lifecycle controls.",
+        "layer": "control",
+        "source": [
+          {
+            "path": "arcticbase/frontend/src/lib/refall/WorkbenchOpsPanel.svelte",
+            "symbol": "",
+            "line": 1
+          },
+          {
+            "path": "ref_all_executor/loop_manager.py",
+            "symbol": "RefallLoopManager.start",
+            "line": 36
+          },
+          {
+            "path": "ref_all_executor/loop_manager.py",
+            "symbol": "RefallLoopManager.update",
+            "line": 54
+          },
+          {
+            "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+            "symbol": "_start_subject",
+            "line": 266
+          }
+        ]
+      },
+      {
+        "id": "backend",
+        "title": "Backend operations",
+        "role": "Generates context and executes authorized lifecycle commands.",
+        "layer": "control",
+        "source": [
+          {
+            "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+            "symbol": "_context_subject",
+            "line": 978
+          },
+          {
+            "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+            "symbol": "_context_materials",
+            "line": 1269
+          },
+          {
+            "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+            "symbol": "_run_context_writer",
+            "line": 1064
+          },
+          {
+            "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+            "symbol": "_save_context_artifacts",
+            "line": 1419
+          }
+        ]
+      },
+      {
+        "id": "broker",
+        "title": "Capability broker",
+        "role": "Matches declared actions to scoped grants.",
+        "layer": "control",
+        "source": [
+          {
+            "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+            "symbol": "CoverageStore.authorize_execution",
+            "line": 1458
+          },
+          {
+            "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+            "symbol": "_grant_refusal_reasons",
+            "line": 1764
+          }
+        ]
+      },
+      {
+        "id": "scheduler",
+        "title": "Module scheduler",
+        "role": "Selects bounded work from subject and target state.",
+        "layer": "execution",
+        "source": [
+          {
+            "path": "ref_all_executor/work_modules.py",
+            "symbol": "WorkModule",
+            "line": 46
+          },
+          {
+            "path": "ref_all_executor/work_modules.py",
+            "symbol": "eligible_modules",
+            "line": 333
+          },
+          {
+            "path": "ref_all_executor/work_modules.py",
+            "symbol": "ModuleScheduler",
+            "line": 386
+          }
+        ]
+      },
+      {
+        "id": "specialists",
+        "title": "Specialist conversations",
+        "role": "Run the assigned research objective in configured execution workspaces.",
+        "layer": "execution",
+        "source": [
+          {
+            "path": "ref_all_executor/router.py",
+            "symbol": "route",
+            "line": 49
+          },
+          {
+            "path": "ref_all_executor/config.py",
+            "symbol": "",
+            "line": 1
+          },
+          {
+            "path": "ref_all_executor/standing_loop.py",
+            "symbol": "RefallStandingLoop._next_dispatch_lane",
+            "line": 379
+          }
+        ]
+      },
+      {
+        "id": "resources",
+        "title": "Analysis resources",
+        "role": "Supply source tools, decompilation, harnesses, and optional MCP services.",
+        "layer": "execution",
+        "source": [
+          {
+            "path": "toolchain/run.sh",
+            "symbol": "",
+            "line": 1
+          },
+          {
+            "path": "toolchain/install.sh",
+            "symbol": "",
+            "line": 1
+          },
+          {
+            "path": "toolchain/config/services.json",
+            "symbol": "",
+            "line": 1
+          }
+        ]
+      },
+      {
+        "id": "capture",
+        "title": "Evidence capture",
+        "role": "Reads event messages, result files, and saved artifacts.",
+        "layer": "evidence",
+        "source": [
+          {
+            "path": "ref_all_executor/standing_loop.py",
+            "symbol": "read_conversation_agent_text",
+            "line": 131
+          },
+          {
+            "path": "ref_all_executor/standing_loop.py",
+            "symbol": "RefallStandingLoop._incremental_ingest",
+            "line": 1115
+          },
+          {
+            "path": "ref_all_executor/standing_loop.py",
+            "symbol": "RefallStandingLoop._merge_submission_file",
+            "line": 965
+          },
+          {
+            "path": "ref_all_executor/standing_loop.py",
+            "symbol": "RefallStandingLoop._register_workspace_artifact",
+            "line": 1010
+          }
+        ]
+      },
+      {
+        "id": "state",
+        "title": "Research state",
+        "role": "Stores inventory, coverage, facts, leads, findings, and obligations.",
+        "layer": "evidence",
+        "source": [
+          {
+            "path": "arcticbase/backend/src/arctic_base/api/refall_subjects.py",
+            "symbol": "",
+            "line": 1
+          },
+          {
+            "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+            "symbol": "CoverageStore",
+            "line": 332
+          },
+          {
+            "path": "arcticbase/backend/src/arctic_base/refall/ledger.py",
+            "symbol": "append_entry",
+            "line": 41
+          }
+        ]
+      },
+      {
+        "id": "continuity",
+        "title": "Runtime continuity",
+        "role": "Maintains active work, notes, manifests, checkpoints, and supervision.",
+        "layer": "evidence",
+        "source": [
+          {
+            "path": "ref_all_executor/standing_loop.py",
+            "symbol": "RefallStandingLoop._write_state",
+            "line": 2163
+          },
+          {
+            "path": "ref_all_executor/standing_loop.py",
+            "symbol": "RefallStandingLoop._write_run_manifest",
+            "line": 2187
+          },
+          {
+            "path": "ref_all_executor/standing_loop.py",
+            "symbol": "RefallStandingLoop._resume_preflight_refused",
+            "line": 2250
+          },
+          {
+            "path": "arcticbase/backend/src/arctic_base/refall/runtime_state.py",
+            "symbol": "resume_preflight",
+            "line": 346
+          }
+        ]
+      },
+      {
+        "id": "decisions",
+        "title": "Finding gates",
+        "role": "Check candidate evidence and receipt-backed state changes.",
+        "layer": "control",
+        "source": [
+          {
+            "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+            "symbol": "CoverageStore.transition_finding",
+            "line": 1008
+          },
+          {
+            "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+            "symbol": "_receipt_stale_reasons",
+            "line": 112
+          }
+        ]
+      },
+      {
+        "id": "publication",
+        "title": "Reports and notes",
+        "role": "Compile persistent evidence while preserving technical detail.",
+        "layer": "publication",
+        "source": [
+          {
+            "path": "ref_all_executor/report_enrich.py",
+            "symbol": "enrich_findings",
+            "line": 19
+          },
+          {
+            "path": "ref_all_executor/report_draft.py",
+            "symbol": "_structural_downgrade_sections",
+            "line": 476
+          },
+          {
+            "path": "ref_all_executor/report_assemble.py",
+            "symbol": "assemble_report",
+            "line": 16
+          }
+        ]
+      },
+      {
+        "id": "closeout",
+        "title": "Closeout gate",
+        "role": "Distinguishes completion barriers, warnings, and overrides.",
+        "layer": "publication",
+        "source": [
+          {
+            "path": "arcticbase/backend/src/arctic_base/refall/closeout_gate.py",
+            "symbol": "evaluate_closeout_gate",
+            "line": 14
+          },
+          {
+            "path": "arcticbase/backend/src/arctic_base/refall/closeout_gate.py",
+            "symbol": "_report_check",
+            "line": 193
+          },
+          {
+            "path": "ref_all_executor/loop_manager.py",
+            "symbol": "RefallLoopManager.closeout",
+            "line": 81
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "from": "operator",
+        "to": "console",
+        "label": "directs"
+      },
+      {
+        "from": "console",
+        "to": "backend",
+        "label": "commands"
+      },
+      {
+        "from": "backend",
+        "to": "broker",
+        "label": "requests authorization"
+      },
+      {
+        "from": "broker",
+        "to": "scheduler",
+        "label": "permits launch"
+      },
+      {
+        "from": "scheduler",
+        "to": "specialists",
+        "label": "assigns"
+      },
+      {
+        "from": "specialists",
+        "to": "resources",
+        "label": "uses"
+      },
+      {
+        "from": "specialists",
+        "to": "capture",
+        "label": "produces"
+      },
+      {
+        "from": "capture",
+        "to": "state",
+        "label": "persists"
+      },
+      {
+        "from": "state",
+        "to": "scheduler",
+        "label": "informs next work"
+      },
+      {
+        "from": "state",
+        "to": "decisions",
+        "label": "supports review"
+      },
+      {
+        "from": "decisions",
+        "to": "state",
+        "label": "records receipts"
+      },
+      {
+        "from": "state",
+        "to": "publication",
+        "label": "supplies evidence"
+      },
+      {
+        "from": "state",
+        "to": "continuity",
+        "label": "preserves run state"
+      },
+      {
+        "from": "continuity",
+        "to": "scheduler",
+        "label": "supports continuation"
+      },
+      {
+        "from": "publication",
+        "to": "closeout",
+        "label": "supplies current report"
+      },
+      {
+        "from": "state",
+        "to": "closeout",
+        "label": "supplies obligations"
+      },
+      {
+        "from": "operator",
+        "to": "decisions",
+        "label": "authorizes exceptions"
+      }
+    ]
+  },
+  "useCases": [
+    {
+      "title": "Source security research",
+      "description": "Combine measured source examination with attack-surface review, candidate findings, verification, and remediation work.",
+      "outcome": "A reviewable evidence trail, explicit unresolved work, and findings linked to source and reproduction material."
+    },
+    {
+      "title": "Reverse engineering and architecture mapping",
+      "description": "Accumulate component determinations, interface observations, flow relationships, saved analysis, and a technical narrative.",
+      "outcome": "A persistent codex that later workers can extend without repeating the entire examination."
+    },
+    {
+      "title": "Compiled-binary investigations",
+      "description": "Use the standalone binary family to seed function questions, examine decompilation, challenge claims, and collect runtime proof.",
+      "outcome": "Function-anchored research, explicit validation blockers, and reproducible finding packages when proof is available."
+    },
+    {
+      "title": "Long research campaigns",
+      "description": "Coordinate bounded specialist work across interrupted execution, provider changes, unresolved decisions, and repeated report revisions.",
+      "outcome": "Resumable subject state with archived evidence, current analyst notes, and an inspectable closeout decision."
+    }
+  ],
+  "sourceRoots": [
+    "ref_all_executor",
+    "coverage_service",
+    "arcticbase/backend/src",
+    "arcticbase/frontend/src",
+    "toolchain/bin",
+    "toolchain/install.sh",
+    "toolchain/run.sh",
+    "toolchain/ctl.sh",
+    "deploy/cron",
+    "drive_context.py",
+    "drive_characterize.py",
+    "drive_research.py",
+    "drive_binresearch.py",
+    "drive_binreview.py",
+    "drive_binvalidate.py",
+    "refall_infra.py",
+    "refall_down.py"
+  ],
+  "controlSummary": "REFALL controls campaign resources, brokered launch decisions, scheduled work, and evidence acceptance. Runtime mounts and tool permissions supply the execution boundary. Recorded receipts keep scope decisions and completion reviewable.",
+  "controlLayers": [
+    {
+      "id": "source-projection",
+      "title": "Source and workspace projection",
+      "kind": "operation gate",
+      "boundary": "Host source directory to the configured Agent Canvas container.",
+      "mechanism": "Resolve the source directory, validate the subject name, inspect the container, and reuse its matching mount or copy source files.",
+      "prevents": "Invalid source directories, unsafe subject names, and failed projection cannot complete this synchronization route.",
+      "activation": "Backend launch supplies an available source path. Existing Docker mounts retain their configured access mode.",
+      "attempt": "Project a missing source directory or an unsafe subject name.",
+      "decision": "Synchronization raises AgentWorkspaceError. A copied directory remains an ordinary container directory.",
+      "source": [
+        {
+          "path": "ref_all_executor/agent_workspace.py",
+          "symbol": "sync_agent_canvas_workspace",
+          "line": 17
+        },
+        {
+          "path": "ref_all_executor/agent_workspace.py",
+          "symbol": "_safe_subject_name",
+          "line": 103
+        }
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Content identity and source observations",
+      "kind": "observation",
+      "boundary": "Configured source root to the campaign inventory.",
+      "mechanism": "Hash file content and record relative paths, file facts, unreadable files, and symlink observations.",
+      "prevents": "No worker operation is blocked by inventory collection. Membership supports later finding checks.",
+      "activation": "Inventory enumeration runs for source intake or an explicit inventory refresh.",
+      "attempt": "A file symlink resolves outside the source root.",
+      "decision": "Record an off-root observation. File facts can still read the resolved file.",
+      "source": [
+        {
+          "path": "ref_all_executor/source_inventory.py",
+          "symbol": "build_source_inventory",
+          "line": 66
+        },
+        {
+          "path": "ref_all_executor/source_inventory.py",
+          "symbol": "_symlink_observation",
+          "line": 179
+        }
+      ]
+    },
+    {
+      "id": "grant-authority",
+      "title": "Authenticated capability changes",
+      "kind": "operator authority",
+      "boundary": "Capability grant and revoke HTTP routes.",
+      "mechanism": "Compare X-REFALL-Operator-Token with the configured token file. Replace the supplied grantor with operator after authentication.",
+      "prevents": "Unauthenticated grant or revoke requests are refused when token protection is configured.",
+      "activation": "Set REFALL_CAPABILITY_OPERATOR_TOKEN_PATH to a readable token file. The default unset value disables token authentication and retains caller-supplied grantor identity.",
+      "attempt": "Submit a grant without the configured operator token.",
+      "decision": "HTTP 403; no grant is stored. An unreadable credential file gives HTTP 503.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_capabilities.py",
+          "symbol": "require_capability_operator",
+          "line": 23,
+          "endLine": 33
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_capabilities.py",
+          "symbol": "grant_capability",
+          "line": 101
+        }
+      ]
+    },
+    {
+      "id": "capability-matching",
+      "title": "Scoped authorization decisions",
+      "kind": "policy gate",
+      "boundary": "An action request presented to the capability broker.",
+      "mechanism": "Require a class and declared effects. Match an active grant against applicable target and effect conditions.",
+      "prevents": "Requests with no matching unexpired grant receive a refusal decision.",
+      "activation": "Call /execution/authorize or use a backend caller that consults the store. Scope checks depend on populated request and grant fields.",
+      "attempt": "Request a host, method, or path outside the configured grant.",
+      "decision": "Return accepted:false with refusal reasons and record the API decision. This decision-only route launches no command; callers must obey refusal.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "CoverageStore.authorize_execution",
+          "line": 1458
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "_grant_refusal_reasons",
+          "line": 1785,
+          "endLine": 1806
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_capabilities.py",
+          "symbol": "authorize_execution",
+          "line": 171
+        }
+      ]
+    },
+    {
+      "id": "launch-release",
+      "title": "Backend process release",
+      "kind": "operation gate",
+      "boundary": "Named Start or Update command to the standing-loop process.",
+      "mechanism": "Apply operation switches and the command allowlist. Authorize the subject-path run_local_command request before launch.",
+      "prevents": "A refused capability decision prevents this backend route from starting the loop process.",
+      "activation": "Enable REFALL_ENABLE_OPS and REFALL_ENABLE_OPS_COMMANDS; both default false. Loop launch defaults true. Disabled launch skips authorization and starts no process.",
+      "attempt": "Start a subject without a matching process grant.",
+      "decision": "HTTP 403 before process launch. Start without stored context returns HTTP 409.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+          "symbol": "require_ops_commands",
+          "line": 115
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+          "symbol": "run_command",
+          "line": 123
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+          "symbol": "_start_subject",
+          "line": 266
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+          "symbol": "_authorize_process_launch",
+          "line": 386,
+          "endLine": 403
+        }
+      ]
+    },
+    {
+      "id": "selection",
+      "title": "Work selection and claim allocation",
+      "kind": "task gate",
+      "boundary": "Stored work to a scheduled subject, unit, or finding assignment.",
+      "mechanism": "Prioritize obligations, subject setup, fresh breadth, finding work, and later unit passes. Use claims and per-target progress.",
+      "prevents": "Eligible selection branches skip modules with unmet dependencies, completed target work, duplicate active target work, matching exclusions, or exhausted module slots.",
+      "activation": "Standing-loop selection applies branch-specific conditions. Fresh breadth bypasses module eligibility; later unit selection omits unit_state. Global concurrency still applies.",
+      "attempt": "A later unit pass does not match its path filter or has an unmet dependency.",
+      "decision": "Skip that pass. Fresh characterization uses direct coverage claims and the global conversation limit.",
+      "source": [
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._claim_next_task",
+          "line": 590
+        },
+        {
+          "path": "ref_all_executor/work_modules.py",
+          "symbol": "eligible_modules",
+          "line": 333
+        },
+        {
+          "path": "ref_all_executor/work_modules.py",
+          "symbol": "ModuleScheduler.next_unit_module",
+          "line": 472
+        }
+      ]
+    },
+    {
+      "id": "runtime-bounds",
+      "title": "Conversation and recovery bounds",
+      "kind": "task gate",
+      "boundary": "A scheduled assignment to the Agent Canvas conversation API.",
+      "mechanism": "Send the task workspace, provider settings, objective, and max_iterations. Classify failures before bounded retry.",
+      "prevents": "Recognized scope, capability, and operator-stop outcomes do not receive ordinary automatic worker retries.",
+      "activation": "The normal dispatcher sends conversation limits to Agent Canvas. Fresh characterization requests 30 iterations; recoverable worker retries default to two attempts.",
+      "attempt": "A worker reports scope_blocked or capability_missing.",
+      "decision": "Preserve available output and create an operator or capability obligation instead of repeating the action.",
+      "source": [
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "AgentCanvasDispatcher.start",
+          "line": 205
+        },
+        {
+          "path": "ref_all_executor/oh_client.py",
+          "symbol": "OHClient.start_conversation",
+          "line": 89
+        },
+        {
+          "path": "ref_all_executor/runtime_invocation.py",
+          "symbol": "classify_invocation",
+          "line": 23
+        }
+      ]
+    },
+    {
+      "id": "task-guidance",
+      "title": "Scope and workspace instructions",
+      "kind": "model guidance",
+      "boundary": "Campaign context to specialist reasoning and tool choice.",
+      "mechanism": "Build an objective from stored context, scope, target, module, routing, output requirements, source location, and scratch location.",
+      "prevents": "These instructions request in-scope behavior. They do not mechanically prevent external tool actions.",
+      "activation": "The dispatcher constructs the specialist initial message.",
+      "attempt": "An assignment identifies source as read-only and provides a scratch directory.",
+      "decision": "The worker receives explicit writing instructions. Actual write permissions come from mounts and process access.",
+      "source": [
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._objective",
+          "line": 888
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "_with_workspace_context",
+          "line": 187
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "_with_resource_context",
+          "line": 180
+        }
+      ]
+    },
+    {
+      "id": "resume",
+      "title": "Continuation input comparison",
+      "kind": "task gate",
+      "boundary": "A checkpointed campaign to a resumed standing loop.",
+      "mechanism": "Compare recorded input hashes with current source and configuration hashes through resume preflight.",
+      "prevents": "A returned drift refusal stops the supported resume path and exposes a decision obligation.",
+      "activation": "Prior checkpoints and the preflight API are available. Missing optional support and some service errors bypass refusal.",
+      "attempt": "Resume with changed checkpoint inputs.",
+      "decision": "Record resume_preflight_refused and stop that continuation path.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/runtime_state.py",
+          "symbol": "resume_preflight",
+          "line": 346
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._resume_preflight_refused",
+          "line": 2250
+        }
+      ]
+    },
+    {
+      "id": "capture",
+      "title": "Continuous result capture",
+      "kind": "observation",
+      "boundary": "Worker events and workspace results to persistent campaign evidence.",
+      "mechanism": "Read conversation events and submission files during execution. Terminal handling classifies, parses, checks identity, and preserves observations before handling the classified outcome.",
+      "prevents": "Observation itself does not stop the worker action that produced a result.",
+      "activation": "Standing-loop polling and completion run ingestion. Structured terminal submission remains optional unless REFALL_REQUIRE_STRUCTURED_SUBMIT is enabled.",
+      "attempt": "A worker fails after it produced useful facts or artifacts.",
+      "decision": "Preserve available output, classify the failure, and expose repair or operator work.",
+      "source": [
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._incremental_ingest",
+          "line": 1115
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._finish_conversation",
+          "line": 1378
+        },
+        {
+          "path": "ref_all_executor/standing_loop.py",
+          "symbol": "RefallStandingLoop._block_empty_subject_module_completion",
+          "line": 1161
+        }
+      ]
+    },
+    {
+      "id": "candidate-acceptance",
+      "title": "Finding admission and declared scope",
+      "kind": "record gate",
+      "boundary": "A proposed finding to canonical finding storage.",
+      "mechanism": "Require evidence, confidence, and source or artifact references. Check available inventory membership and explicit external-target scope.",
+      "prevents": "Unsupported or out-of-scope candidates are refused admission to the finding store.",
+      "activation": "add_finding evaluates a proposed record after worker activity. Inventory membership is advisory when inventory is unavailable; external URL hosts require explicit scope.",
+      "attempt": "A candidate cites https://outside.example.test without that host in explicit external_targets.",
+      "decision": "Refuse promotion. The API records the refusal and creates review work.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/promotion_gates.py",
+          "symbol": "evaluate_finding_candidate",
+          "line": 12
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "CoverageStore.add_finding",
+          "line": 749
+        }
+      ]
+    },
+    {
+      "id": "disposition",
+      "title": "Typed finding transitions",
+      "kind": "record gate",
+      "boundary": "Existing finding state to a new status or quality tier.",
+      "mechanism": "Check current status, allowed states, receipt types, evidence references, pending contradictions, and supplied source hashes.",
+      "prevents": "A refused transition preserves the existing finding state and records the refused attempt.",
+      "activation": "The transition path receives a proposed decision. Hash freshness checks activate when the receipt supplies source or configuration hashes.",
+      "attempt": "Mark a finding FALSE_POSITIVE without an accepted receipt type and evidence.",
+      "decision": "Refuse the transition. Live validation, duplicate, downgrade, and chain deferral have separate receipt requirements.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "CoverageStore.transition_finding",
+          "line": 1008
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "_receipt_stale_reasons",
+          "line": 112
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "CoverageStore.update_finding_validation",
+          "line": 974
+        }
+      ]
+    },
+    {
+      "id": "obligations",
+      "title": "Persistent resolution obligations",
+      "kind": "record gate",
+      "boundary": "Open or claimed pending work to a terminal resolution.",
+      "mechanism": "Keep missing access, blocked scope, incomplete evidence, and refused decisions in pending records. Validate required resolution receipts.",
+      "prevents": "Required receipt failures prevent pending-action resolution; open obligations can block closeout.",
+      "activation": "Resolve, defer, or cancel a pending action. Required types vary by action; an untyped done action does not universally require evidence.",
+      "attempt": "Defer an obligation without evidence references.",
+      "decision": "Reject the resolution. Required receipt types must match and include evidence.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "CoverageStore.finish_pending_action",
+          "line": 1243
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/coverage_store.py",
+          "symbol": "CoverageStore.trigger_pending_actions_for_runtime_event",
+          "line": 1346
+        }
+      ]
+    },
+    {
+      "id": "report-protection",
+      "title": "Report replacement protection",
+      "kind": "record gate",
+      "boundary": "Enriched report content to the current report object.",
+      "mechanism": "Compare populated report sections before replacing the current formal report. Retain a refused candidate as a diagnostic object.",
+      "prevents": "An unapproved structural downgrade cannot replace the current report through this assembly path.",
+      "activation": "assemble_report defaults allow_structural_downgrade to false. Explicit override bypasses this guard. Generic object writes use a separate API path.",
+      "attempt": "Replace a rich report with a candidate that loses protected sections.",
+      "decision": "Return downgrade_refused and keep the current report.",
+      "source": [
+        {
+          "path": "ref_all_executor/report_assemble.py",
+          "symbol": "assemble_report",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "closeout",
+      "title": "Campaign closeout acceptance",
+      "kind": "record gate",
+      "boundary": "Current campaign records to a closed lifecycle result.",
+      "mechanism": "Check pending actions, receipts, refused transitions, finding proof, expired claims, context, and report freshness.",
+      "prevents": "Blocking failures prevent a successful closed result from the closeout operation.",
+      "activation": "Named Closeout or the loop manager evaluates the gate. Draft/current reports can already exist; this gate controls the closed lifecycle result.",
+      "attempt": "Close a campaign with open pending work or a stale report.",
+      "decision": "Return blocked and record loop.closeout.blocked. Coverage below 95 percent is advisory.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/closeout_gate.py",
+          "symbol": "evaluate_closeout_gate",
+          "line": 14
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_ops_commands.py",
+          "symbol": "_closeout_subject",
+          "line": 570
+        },
+        {
+          "path": "ref_all_executor/loop_manager.py",
+          "symbol": "RefallLoopManager.closeout",
+          "line": 81
+        }
+      ]
+    },
+    {
+      "id": "operator-exceptions",
+      "title": "Recorded closeout exceptions",
+      "kind": "operator authority",
+      "boundary": "A declared operator exception to selected closeout checks.",
+      "mechanism": "Require check IDs and a nonempty receipt. Append an accepted override entry and make matching failed checks nonblocking warnings.",
+      "prevents": "Missing check IDs or receipt prevent this override route from accepting the exception.",
+      "activation": "The override route receives an explicit decision record. It records the supplied operator name without capability-token authentication; deployment access control establishes caller authority.",
+      "attempt": "Accept a selected closeout exception with a receipt and reason.",
+      "decision": "Keep the failed condition visible as an overridden warning and retain the ledger reference.",
+      "source": [
+        {
+          "path": "arcticbase/backend/src/arctic_base/api/refall_closeout.py",
+          "symbol": "override_closeout_gate",
+          "line": 33
+        },
+        {
+          "path": "arcticbase/backend/src/arctic_base/refall/closeout_gate.py",
+          "symbol": "_apply_override",
+          "line": 421
+        }
+      ]
+    }
+  ]
+}

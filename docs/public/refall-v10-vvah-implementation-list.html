@@ -1,0 +1,141 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>REFALL AB architecture</title><style>body{margin:0;background:#f5f6f7;color:#162332;font:17px/1.65 system-ui,sans-serif}main{max-width:950px;margin:auto;padding:48px 24px}h1{font-size:2.4rem;line-height:1.15}h2{margin-top:2em}a{color:#174f9b}table{border-collapse:collapse;width:100%;font-size:.9em}td,th{padding:10px;border:1px solid #ccd2d9;text-align:left}pre{overflow:auto;padding:18px;background:#e8edf2}code{overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap} @media(max-width:600px){main{padding:24px 16px}h1{font-size:2rem}table{display:block;overflow:auto}} @media print{body{background:white}main{padding:0}nav{display:none}}</style><main><nav><a href="../README.md">Documentation</a><a href="../../BASE-INSTALLATION.md">Installation</a><a href="../../OPERATING_GUIDE.md">Operation</a></nav><h1>REFALL AB architecture</h1>
+<h2>System model</h2>
+<p>REFALL AB connects a manager, specialist agents, and persistent workbench state.
+The manager determines the next work item from subject context, scope, coverage, and unresolved obligations.
+Specialists return structured observations and evidence.
+The workbench stores the results and controls finding transitions.</p>
+<h2>Components</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Location</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backend and web interface</td>
+<td><code>arcticbase/</code></td>
+<td>Workbench storage, operations, coverage, reports, and APIs.</td>
+</tr>
+<tr>
+<td>Executor</td>
+<td><code>ref_all_executor/</code></td>
+<td>Agent clients, work routing, loops, cleanup, and report processing.</td>
+</tr>
+<tr>
+<td>Source drivers</td>
+<td><code>drive_context.py</code>, <code>drive_characterize.py</code>, <code>drive_research.py</code></td>
+<td>Subject briefing, characterization, and source research.</td>
+</tr>
+<tr>
+<td>Binary drivers</td>
+<td><code>drive_binresearch.py</code>, <code>drive_binreview.py</code>, <code>drive_binvalidate.py</code></td>
+<td>Binary research, independent review, and runtime validation.</td>
+</tr>
+<tr>
+<td>Compatibility coverage service</td>
+<td><code>coverage_service/</code></td>
+<td>Legacy service and coverage schema.</td>
+</tr>
+<tr>
+<td>Analysis tools</td>
+<td><code>toolchain/</code></td>
+<td>Source indexes, graph generation, metrics, and MCP services.</td>
+</tr>
+<tr>
+<td>Agent execution</td>
+<td>Agent Canvas/OpenHands</td>
+<td>Specialist conversations and execution environments.</td>
+</tr>
+</tbody>
+</table>
+<p>The backend directory retains the ArcticBase implementation name.
+The product name is REFALL AB.
+The bundled backend includes REFALL-specific APIs and state models.</p>
+<h2>Work allocation</h2>
+<p>A subject inventory supplies the denominator for coverage measurements.
+Coverage units describe bounded work items.
+Agents claim units before they submit observations.
+Claim leases prevent indefinite ownership after an agent stops.</p>
+<p>The standing loop dispatches work through the configured lanes.
+Source research, binary review, runtime validation, and report preparation have separate roles.
+Lane A uses Claude through ACP.
+Lane B uses Codex through ACP.
+Lane G is an optional worker that the host manager runs in a sandbox.</p>
+<p>A subject-specific subloop can supply a harness, profile, device interface, or proof stage.
+The core retains work allocation, evidence storage, and publication responsibilities.</p>
+<h2>Persistent state</h2>
+<table>
+<thead>
+<tr>
+<th>Record</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Subject context</td>
+<td>Shared briefing and operator constraints.</td>
+</tr>
+<tr>
+<td>Source inventory</td>
+<td>Files and other material within the examination scope.</td>
+</tr>
+<tr>
+<td>Scope overlay</td>
+<td>Included and excluded surfaces.</td>
+</tr>
+<tr>
+<td>Coverage</td>
+<td>Claimed units, completed work, and unresolved investigations.</td>
+</tr>
+<tr>
+<td>Ledger</td>
+<td>Evidence records and decisions.</td>
+</tr>
+<tr>
+<td>Pending actions</td>
+<td>Work that requires a response or additional proof.</td>
+</tr>
+<tr>
+<td>Capabilities</td>
+<td>Scoped operator grants and authorization decisions.</td>
+</tr>
+<tr>
+<td>Runtime manifest</td>
+<td>Current run state and resource information.</td>
+</tr>
+<tr>
+<td>Report</td>
+<td>Current published report object.</td>
+</tr>
+</tbody>
+</table>
+<p>Workbench coverage uses <code>refall_coverage.db</code>.
+The ledger uses <code>refall_ledger.jsonl</code>.
+Subject runtime state uses <code>.refall/runtime/state.sqlite</code>.
+Runtime artifacts use <code>.refall/runtime/artifacts/</code>.</p>
+<p>The runtime database stores events, sessions, retries, artifacts, observations, and control signals.
+The backend remains the authoritative store for workbench coverage, pending actions, capabilities, reports, and closeout state.</p>
+<h2>Result processing</h2>
+<ol>
+<li>Receive a fenced <code>refall-submit</code> block from the specialist.</li>
+<li>Validate the submission structure.</li>
+<li>Store new findings and evidence.</li>
+<li>Submit proposed finding transitions to the disposition gate.</li>
+<li>Preserve unresolved work as pending actions.</li>
+<li>Update coverage and the runtime manifest.</li>
+</ol>
+<p>The submission identity prevents duplicate application of the same result.
+Source hashes identify evidence that depends on exact source or configuration bytes.
+The disposition gate refuses receipts with stale source hashes.</p>
+<h2>Gates</h2>
+<p>The disposition gate requires evidence before a finding changes state.
+The capability broker checks live actions against operator grants.
+The closeout gate checks that research obligations and publication requirements are complete.
+These gates preserve the reason for accepted and refused decisions.</p>
+<p>Read <a href="../evidence.md">Evidence</a> for submission and receipt requirements.
+Read <a href="../api.md">API reference</a> for the route map.</p>
+</main></html>

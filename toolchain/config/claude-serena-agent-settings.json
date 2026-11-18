@@ -1,0 +1,17 @@
+{
+  "agent_kind": "acp",
+  "acp_server": "claude-code",
+  "acp_command": [],
+  "acp_model": "claude-sonnet-4-5",
+  "acp_prompt_timeout": 1800,
+  "mcp_config": {
+    "mcpServers": {
+      "serena": {
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:20872/mcp",
+        "timeout": 30,
+        "description": "Serena semantic code understanding MCP service managed by /projects/REFALL-V10/toolchain/ctl.sh"
+      }
+    }
+  }
+}

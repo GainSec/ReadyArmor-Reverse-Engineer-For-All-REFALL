@@ -1,0 +1,75 @@
+{
+  "services": [
+    {
+      "name": "python-lsp-server",
+      "description": "python-lsp-server (pylsp) in TCP mode for interactive Python code understanding sessions.",
+      "start_cmd": "exec \"$TOOLCHAIN_ROOT/.venv/bin/pylsp\" --tcp --host 127.0.0.1 --port 20871",
+      "stop_method": "process_group",
+      "health_check": {
+        "type": "tcp",
+        "host": "127.0.0.1",
+        "port": 20871,
+        "timeout_sec": 10
+      },
+      "port": 20871,
+      "log_file": "logs/python-lsp-server.log"
+    },
+    {
+      "name": "serena",
+      "description": "Serena MCP server in streamable HTTP mode for opt-in agent-facing semantic code understanding.",
+      "start_cmd": "exec env SERENA_HOME=\"$TOOLCHAIN_ROOT/serena-home\" PATH=\"$TOOLCHAIN_ROOT/uv-bin:$TOOLCHAIN_ROOT/node_modules/.bin:$PATH\" SERENA_USAGE_REPORTING=false \"$TOOLCHAIN_ROOT/uv-bin/serena\" start-mcp-server --transport streamable-http --host 127.0.0.1 --port 20872 --context ide --enable-web-dashboard false --open-web-dashboard false",
+      "stop_method": "process_group",
+      "health_check": {
+        "type": "tcp",
+        "host": "127.0.0.1",
+        "port": 20872,
+        "timeout_sec": 20
+      },
+      "port": 20872,
+      "log_file": "logs/serena.log"
+    },
+    {
+      "name": "codebase-memory",
+      "description": "Codebase-Memory MCP stdio server for opt-in agent-facing persistent code graph and semantic search.",
+      "start_cmd": "exec env CBM_MEM_BUDGET_MB=2048 TOOLCHAIN_ROOT=\"$TOOLCHAIN_ROOT\" \"$TOOLCHAIN_ROOT/bin/codebase-memory-mcp\"",
+      "stop_method": "process_group",
+      "transport": "stdio",
+      "autostart": false,
+      "health_check": {
+        "type": "pid",
+        "timeout_sec": 10
+      },
+      "port": null,
+      "log_file": "logs/codebase-memory.log"
+    },
+    {
+      "name": "codebadger-mcp",
+      "description": "Codebadger MCP full Docker stack for opt-in CPG, data-flow, taint, slicing, and vulnerability analysis.",
+      "start_cmd": "exec \"$TOOLCHAIN_ROOT/bin/codebadger-service\" supervise",
+      "stop_method": "process_group",
+      "transport": "streamable-http",
+      "autostart": false,
+      "health_check": {
+        "type": "command",
+        "cmd": "\"$TOOLCHAIN_ROOT/bin/codebadger-service\" health",
+        "timeout_sec": 180
+      },
+      "port": 4242,
+      "log_file": "logs/codebadger-mcp.log"
+    }
+  ],
+  "extension_slots": [
+    {
+      "name": "codegraph-mcp-server",
+      "status": "stub",
+      "note": "Future MCP daemon. Do not install or run now. Copy into services[] only after the command and health behavior are known.",
+      "start_cmd": "TODO: exec codegraph-mcp-server <args>",
+      "stop_method": "process_group",
+      "health_check": {
+        "type": "pid"
+      },
+      "port": null,
+      "log_file": "logs/codegraph-mcp-server.log"
+    }
+  ]
+}

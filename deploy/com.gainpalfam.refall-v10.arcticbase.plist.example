@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.gainpalfam.refall-v10.arcticbase</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/homebrew/bin/uv</string>
+    <string>run</string>
+    <string>arctic-base</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>__REFALL_REPO_ROOT__/arcticbase/backend</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>HOME</key>
+    <string>__USER_HOME__</string>
+    <key>ARCTIC_BASE_HOST</key>
+    <string>__LAN_IP__</string>
+    <key>ARCTIC_BASE_PORT</key>
+    <string>7673</string>
+    <key>ARCTIC_BASE_DATA</key>
+    <string>__REFALL_REPO_ROOT__/arcticbase/backend/data</string>
+    <key>REFALL_DATA_ROOT</key>
+    <string>__REFALL_REPO_ROOT__/arcticbase/backend/data/refall</string>
+    <key>REFALL_ENABLE_OPS</key>
+    <string>true</string>
+    <key>REFALL_ENABLE_OPS_COMMANDS</key>
+    <string>true</string>
+    <key>REFALL_ENABLE_LOOP_LAUNCH</key>
+    <string>true</string>
+    <key>REFALL_REPO_ROOT</key>
+    <string>__REFALL_REPO_ROOT__</string>
+    <key>REFALL_PUBLIC_BASE_URL</key>
+    <string>http://__LAN_IP__:7673</string>
+    <key>REFALL_OPS_ALLOWED_COMMANDS</key>
+    <string>status,subjects,agents,infra,start,update,closeout,context,coverage,threat-model,doctor,estimate,logs</string>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>KeepAlive</key>
+  <true/>
+
+  <key>StandardOutPath</key>
+  <string>__REFALL_REPO_ROOT__/logs/arcticbase-v10.log</string>
+  <key>StandardErrorPath</key>
+  <string>__REFALL_REPO_ROOT__/logs/arcticbase-v10.err.log</string>
+</dict>
+</plist>

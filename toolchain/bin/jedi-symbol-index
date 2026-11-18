@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+"""Emit a lightweight Jedi-backed Python symbol index as JSON."""
+from __future__ import annotations
+
+import ast
+import json
+import sys
+from pathlib import Path
+
+import jedi
+
+
+def iter_py_files(root: Path) -> list[Path]:
+    ignored = {".git", ".hg", ".svn", ".venv", "venv", "env", "node_modules", "__pycache__"}
+    files: list[Path] = []
+    for path in root.rglob("*.py"):
+        if any(part in ignored for part in path.parts):
+            continue
+        files.append(path)
+    return sorted(files)
+
+
+def ast_symbols(source: str) -> list[dict[str, object]]:
+    tree = ast.parse(source)
+    symbols: list[dict[str, object]] = []
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
+            symbols.append(
+                {
+                    "name": node.name,
+                    "kind": type(node).__name__,
+                    "line": node.lineno,
+                    "end_line": getattr(node, "end_lineno", None),
+                }
+            )
+    return sorted(symbols, key=lambda item: (int(item["line"]), str(item["name"])))
+
+
+def main() -> int:
+    if len(sys.argv) != 3:
+        print("usage: jedi-symbol-index <TARGET_DIR> <OUTPUT_JSON>", file=sys.stderr)
+        return 2
+    target = Path(sys.argv[1]).resolve()
+    output = Path(sys.argv[2]).resolve()
+    output.parent.mkdir(parents=True, exist_ok=True)
+    files = []
+    errors = []
+    for path in iter_py_files(target):
+        try:
+            source = path.read_text(encoding="utf-8")
+            script = jedi.Script(code=source, path=str(path))
+            names = [
+                {
+                    "name": name.name,
+                    "kind": name.type,
+                    "line": name.line,
+                    "column": name.column,
+                    "full_name": name.full_name,
+                }
+                for name in script.get_names(all_scopes=True, definitions=True, references=False)
+            ]
+            files.append(
+                {
+                    "path": str(path.relative_to(target)),
+                    "jedi_names": names,
+                    "ast_symbols": ast_symbols(source),
+                }
+            )
+        except Exception as exc:  # noqa: BLE001 - indexer should be resilient.
+            errors.append({"path": str(path), "error": repr(exc)})
+    output.write_text(
+        json.dumps(
+            {
+                "tool": "jedi-symbol-index",
+                "target": str(target),
+                "files_indexed": len(files),
+                "files": files,
+                "errors": errors,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return 0 if not errors else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "codebase-memory": {
+      "command": "/projects/REFALL-V10/toolchain/bin/codebase-memory-mcp",
+      "args": [],
+      "env": {
+        "CBM_MEM_BUDGET_MB": "2048"
+      },
+      "description": "Codebase-Memory local stdio MCP server managed for opt-in use by /projects/REFALL-V10/toolchain/ctl.sh; no API keys required."
+    }
+  }
+}

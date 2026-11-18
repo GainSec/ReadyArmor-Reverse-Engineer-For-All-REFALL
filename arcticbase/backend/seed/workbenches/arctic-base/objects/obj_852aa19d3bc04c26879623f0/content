@@ -1,0 +1,16 @@
+# REFALL AB workbench
+
+The workbench stores subject context, coverage records, evidence, capability decisions, and reports.
+Each subject has a separate workbench.
+The ledger preserves observations and decisions across agent sessions.
+
+## Operation
+
+1. Create a subject workbench.
+2. Set the source path.
+3. Generate the shared context.
+4. Examine the scope and launch capability.
+5. Start the research loop.
+6. Examine findings and pending actions.
+7. Prepare the report.
+8. Resolve closeout conditions.

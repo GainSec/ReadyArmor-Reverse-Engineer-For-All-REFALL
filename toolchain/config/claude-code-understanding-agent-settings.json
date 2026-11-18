@@ -1,0 +1,31 @@
+{
+  "agent_kind": "acp",
+  "acp_server": "claude-code",
+  "acp_command": [],
+  "acp_model": "claude-sonnet-4-5",
+  "acp_prompt_timeout": 1800,
+  "mcp_config": {
+    "mcpServers": {
+      "serena": {
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:20872/mcp",
+        "timeout": 30,
+        "description": "Serena semantic code understanding MCP service managed by /projects/REFALL-V10/toolchain/ctl.sh"
+      },
+      "codebase-memory": {
+        "command": "/projects/REFALL-V10/toolchain/bin/codebase-memory-mcp",
+        "args": [],
+        "env": {
+          "CBM_MEM_BUDGET_MB": "2048"
+        },
+        "description": "Codebase-Memory local stdio MCP server for persistent code graph and semantic search; no API keys required."
+      },
+      "codebadger": {
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:4242/mcp",
+        "timeout": 60,
+        "description": "Codebadger CPG/data-flow/taint analysis MCP service managed by /projects/REFALL-V10/toolchain/ctl.sh; start only when the subject merits deep semantic security analysis."
+      }
+    }
+  }
+}

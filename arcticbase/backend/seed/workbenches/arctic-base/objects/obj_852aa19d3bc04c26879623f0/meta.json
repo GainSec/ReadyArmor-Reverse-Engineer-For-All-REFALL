@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "id": "obj_852aa19d3bc04c26879623f0",
+  "kind": "md",
+  "title": "Workbench guide",
+  "description": "",
+  "drawer": "docs",
+  "filename": "README.md",
+  "mime": "text/markdown",
+  "size_bytes": 504,
+  "etag": "sha256:f9c49447c097be4173400f9c3538c097faf1c6f350b0fbd09fe3104eaee7a4d6",
+  "created_at": "2026-04-25T14:59:56.076882Z",
+  "updated_at": "2026-04-26T09:59:10.568725Z",
+  "state_version": 0,
+  "order": 0,
+  "last_accessed_at": "2026-04-26T06:50:39.376673Z",
+  "pinned": false,
+  "archived": false
+}
