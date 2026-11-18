@@ -320,7 +320,7 @@ class Atlas:
             dest = self.chapter_map[rel]
             anchor = dest["heads"].get(fragment, dest["id"])
             return f'<a href="#{anchor}">{self.inline(label, ch)}</a>'
-        if rel in ["docs/index.html", "pages/index.html"]:
+        if rel == "docs/index.html":
             return f'<a href="#overview">{self.inline(label, ch)}</a>'
         if p.is_file() and p.suffix in [
             ".py",
@@ -1001,18 +1001,8 @@ class Atlas:
             + JS
             + "</script></body></html>\n"
         )
-        publication = self.root / "pages"
+        publication = self.root / "docs"
         publication.mkdir(exist_ok=True)
-        unexpected = [
-            p.name
-            for p in publication.iterdir()
-            if p.name not in {"index.html", ".nojekyll"}
-        ]
-        if unexpected:
-            raise ValueError(
-                "The Pages output must contain only the standalone HTML publication: "
-                + ", ".join(unexpected)
-            )
         dest = publication / "index.html"
         dest.write_text(output)
         (publication / ".nojekyll").touch()

@@ -26,6 +26,9 @@ class AtlasContract(unittest.TestCase):
             (root / "docs/usage.md").write_text(
                 '# Usage\n\n## Configure\n\nUse `<script>alert(1)</script>` as a literal.\n\n| Setting | Value |\n| --- | --- |\n| Mode | Local |\n\n````text\n```json\n{"value": 1}\n```\n````\n'
             )
+            (root / "docs/retained-guide.md").write_text(
+                "# Retained guide\n\nKeep this guide beside the publication.\n"
+            )
             (root / "src/__init__.py").write_text("")
             (root / "src/example.py").write_text(
                 'def control():\n    return "</script><script>malicious()</script>"\n'
@@ -145,6 +148,12 @@ class AtlasContract(unittest.TestCase):
                 ],
             }
             (root / "docs/site.json").write_text(json.dumps(profile))
+            original_files = {
+                path.relative_to(root): path.read_bytes()
+                for path in root.rglob("*")
+                if path.is_file()
+                and path.relative_to(root) != pathlib.Path("docs/source-index.md")
+            }
             r = subprocess.run(
                 ["python3", str(BUILDER), "--root", str(root)],
                 capture_output=True,
@@ -152,10 +161,14 @@ class AtlasContract(unittest.TestCase):
             )
             self.assertEqual(r.returncode, 0, r.stderr + r.stdout)
             self.assertTrue(
-                (root / "pages/index.html").is_file(),
-                "The builder must emit an isolated Pages HTML artifact",
+                (root / "docs/index.html").is_file(),
+                "The builder must emit the branch-published docs HTML artifact",
             )
-            page = (root / "pages/index.html").read_text()
+            self.assertFalse(
+                (root / "pages").exists(),
+                "The builder must not create a second publication directory",
+            )
+            page = (root / "docs/index.html").read_text()
             self.assertIn(
                 "Empty module marker", (root / "docs/source-index.md").read_text()
             )
@@ -242,14 +255,23 @@ class AtlasContract(unittest.TestCase):
                 tags.local_links,
                 "Published navigation must stay within the standalone HTML document",
             )
-            self.assertTrue((root / "pages/.nojekyll").exists())
+            self.assertTrue((root / "docs/.nojekyll").is_file())
+            retained_files = {
+                path.relative_to(root): path.read_bytes()
+                for path in root.rglob("*")
+                if path.is_file()
+                and path.relative_to(root)
+                not in {
+                    pathlib.Path("docs/index.html"),
+                    pathlib.Path("docs/.nojekyll"),
+                    pathlib.Path("docs/source-index.md"),
+                }
+            }
             self.assertEqual(
-                {p.name for p in (root / "pages").iterdir()},
-                {"index.html", ".nojekyll"},
-                "Pages output must contain only the standalone page and its static marker",
+                retained_files,
+                original_files,
+                "Building the docs publication must preserve hand-authored files and assets",
             )
-            self.assertTrue((root / "docs/usage.md").exists())
-            self.assertTrue((root / "docs/site.json").exists())
 
 
 if __name__ == "__main__":

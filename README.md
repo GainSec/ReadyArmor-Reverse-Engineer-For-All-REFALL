@@ -145,7 +145,7 @@ A coordinator cycle limit controls polling work; active worker state can remain 
 Repeated recovery can end in an operator hold.
 
 Read [Research cycles](docs/research-cycles.md) for the exact scheduling, retry, completion, and closeout paths.
-Open [the interactive cycle maps](pages/index.html#walkthroughs) to inspect the nodes and their source references.
+Open [the interactive cycle maps](docs/index.html#walkthroughs) to inspect the nodes and their source references.
 
 ## The ledger is the campaign's research journal
 
@@ -367,7 +367,7 @@ The manager startup instructions are in `starthere/` and `docs/codex-startup/`.
 
 ## Interactive technical atlas
 
-Open the [self-contained technical atlas](pages/index.html) for the capability catalog, architecture diagrams, operating traces, searchable guides, and source excerpts.
+Open the [self-contained technical atlas](docs/index.html) for the capability catalog, architecture diagrams, operating traces, searchable guides, and source excerpts.
 The complete site works offline as one HTML file.
 Read [Documentation site](docs/site.md) for rebuilding and GitHub Pages publication.
 
